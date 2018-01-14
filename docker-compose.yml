@@ -1,0 +1,32 @@
+version: '2.1'
+services:
+  zeppelin:
+    labels:
+      - "project=tgraph"
+    image: tgraph/zeppelin:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - zeppelinnotebook:/zeppelin/notebook
+      - zeppelinconf:/zeppelin/conf
+  jekyll:
+    labels:
+      - "project=tgraph"
+    image: tgraph/jekyll:latest
+    command: jekyll serve
+    ports:
+      - "4000:4000"
+    links:
+      - zeppelin
+
+volumes:
+    zeppelinnotebook:
+        driver: local
+        labels:
+            - "project=tgraph"
+            - "service=zeppelin"
+    zeppelinconf:
+        driver: local
+        labels:
+            - "project=tgraph"
+            - "service=zeppelin"

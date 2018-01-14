@@ -1,0 +1,363 @@
+{
+  "paragraphs": [
+    {
+      "text": "\nz.show(\"\"\"%html\n\u003ch3\u003eDegree Centrality: a measure of the uniformity of degree (\"influence\") of a graph.\u003c/h3\u003e\n    \u003ch4\u003eThe most centralized graph is a \"star graph\", where a central node is connected to every other, and the other nodes are connected to only the central node.\u003c/h4\u003e\n    \u003cimg src\u003d\"http://www.faculty.ucr.edu/~hanneman/nettext/Figure10_1.jpg\" width\u003d\"200\" height\u003d\"200\" /\u003e\n    \u003ch4\u003eThe least centralized graph is a \"circle graph\", where all nodes have the same exact degree.\u003c/h4\u003e\n    \u003cimg src\u003d\"http://www.faculty.ucr.edu/~hanneman/nettext/Figure10_3.jpg\" width\u003d\"200\" height\u003d\"200\" /\u003e\n\u003ch3\u003eIn this example, we\u0027ll use Portal to measure the degree centrality of the DBLP graph over time.\u003c/h3\u003e\n\u003ch5\u003eNote: for an explanation of how to calculate degree centrality, see here: https://en.wikipedia.org/wiki/Centrality\u003c/h5\u003e\n\"\"\")",
+      "user": "anonymous",
+      "dateUpdated": "Jan 14, 2018 4:13:40 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eDegree Centrality: a measure of the uniformity of degree (\"influence\") of a graph.\u003c/h3\u003e\n    \u003ch4\u003eThe most centralized graph is a \"star graph\", where a central node is connected to every other, and the other nodes are connected to only the central node.\u003c/h4\u003e\n    \u003cimg src\u003d\"http://www.faculty.ucr.edu/~hanneman/nettext/Figure10_1.jpg\" width\u003d\"200\" height\u003d\"200\" /\u003e\n    \u003ch4\u003eThe least centralized graph is a \"circle graph\", where all nodes have the same exact degree.\u003c/h4\u003e\n    \u003cimg src\u003d\"http://www.faculty.ucr.edu/~hanneman/nettext/Figure10_3.jpg\" width\u003d\"200\" height\u003d\"200\" /\u003e\n\u003ch3\u003eIn this example, we\u0027ll use Portal to measure the degree centrality of the DBLP graph over time.\u003c/h3\u003e\n\u003ch5\u003eNote: for an explanation of how to calculate degree centrality, see here: https://en.wikipedia.org/wiki/Centrality\u003c/h5\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1513711116987_-998599153",
+      "id": "20171122-233359_356162831",
+      "dateCreated": "Dec 19, 2017 7:18:36 PM",
+      "dateStarted": "Dec 21, 2017 6:18:54 PM",
+      "dateFinished": "Dec 21, 2017 6:18:54 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Step 1: calculate the degree of each node at all points in time",
+      "text": "import java.sql.Date\nimport java.time.{LocalDate, Period}\nimport java.time.temporal.ChronoUnit\n\nimport edu.drexel.cs.dbgroup.portal._\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport org.apache.log4j.{Level, Logger}\nimport org.apache.spark.graphx.{TripletFields, VertexId}\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.types.{StructField, _}\nimport org.apache.spark.sql.{Row, SQLContext}\nimport org.apache.spark.{SparkConf, SparkContext}\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\n\nProgramContext.setContext(sc)\n\nval schema \u003d StructType(\n  StructField(\"Start\", DateType, false) ::\n  StructField(\"End\", DateType, false) ::\n  StructField(\"GraphCentrality\", DecimalType(DecimalType.MAX_PRECISION, DecimalType.MAX_SCALE), false) :: Nil\n)\n\nval dblp: VEGraph[String, Any] \u003d GraphLoader\n  .buildVE(\"file:///zeppelin/dblp\", 1, 1, Interval(LocalDate.MIN, LocalDate.parse(\"1970-01-01\")))\n  .asInstanceOf[VEGraph[String,Any]]\n\n// calculate the degree of each vertex at every point in time\nval degrees: VEGraph[Int, Any] \u003d\n  dblp\n    .aggregateMessages(\n      triplet \u003d\u003e Iterator((triplet.srcId, 1), (triplet.dstId, 1)),\n      (a: Int,b: Int) \u003d\u003e a + b,\n      0,\n      TripletFields.None\n    )\n    .vmap((_,_,attr) \u003d\u003e attr._2, 0)",
+      "user": "anonymous",
+      "dateUpdated": "Jan 10, 2018 12:48:26 AM",
+      "config": {
+        "tableHide": true,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "colWidth": 6.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true,
+        "results": {
+          "1": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": true,
+              "setting": {
+                "lineChart": {}
+              },
+              "commonSetting": {},
+              "keys": [],
+              "groups": [],
+              "values": []
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.sql.Date\nimport java.time.{LocalDate, Period}\nimport java.time.temporal.ChronoUnit\nimport edu.drexel.cs.dbgroup.portal._\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport org.apache.log4j.{Level, Logger}\nimport org.apache.spark.graphx.{TripletFields, VertexId}\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.types.{StructField, _}\nimport org.apache.spark.sql.{Row, SQLContext}\nimport org.apache.spark.{SparkConf, SparkContext}\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\nschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(Start,DateType,false), StructField(End,DateType,false), StructField(GraphCentrality,DecimalType(38,38),false))\ndblp: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@37e2d3f3\ndegrees: edu.drexel.cs.dbgroup.portal.representations.VEGraph[Int,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@4fa0df14\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1513711116980_-997444906",
+      "id": "20171111-211648_1638258888",
+      "dateCreated": "Dec 19, 2017 7:18:36 PM",
+      "dateStarted": "Jan 10, 2018 12:48:26 AM",
+      "dateFinished": "Jan 10, 2018 12:48:31 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Step 2: initialize the resulting graph to have 2 extra vertex vales, one to hold the maximum observed degree, and another to hold the total count of vertices",
+      "text": "val initializeMaxAndCount: VEGraph[(Int,Int,Int), Any] \u003d\n      degrees.vmap((_, _, degree) \u003d\u003e (degree, degree, 1), (0,0,1))",
+      "user": "anonymous",
+      "dateUpdated": "Jan 10, 2018 12:52:23 AM",
+      "config": {
+        "colWidth": 6.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "initializeMaxAndCount: edu.drexel.cs.dbgroup.portal.representations.VEGraph[(Int, Int, Int),Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@57be937d\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1513878844142_-1998996577",
+      "id": "20171221-175404_2098675054",
+      "dateCreated": "Dec 21, 2017 5:54:04 PM",
+      "dateStarted": "Jan 10, 2018 12:52:23 AM",
+      "dateFinished": "Jan 10, 2018 12:52:24 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Step 3: use structural aggregation to calculate the total degree count, the maximum degree, and the total vertex count, for the whole graph",
+      "text": "val vertexAggregationFunction: ((Int, Int, Int), (Int, Int, Int)) \u003d\u003e (Int, Int, Int) \u003d {\n  case ((degree1, max1, count1),(degree2,max2,count2)) \u003d\u003e (\n    degree1 + degree2,\n    Math.max(max1,max2),\n    count1 + count2\n  )\n}\nval vertexGroupByFunction: (VertexId, (Int, Int, Int)) \u003d\u003e VertexId \u003d (_, _) \u003d\u003e 0\n\nval structurallyAggregated: VEGraph[(Int, Int, Int), Any] \u003d initializeMaxAndCount.createAttributeNodes(vertexAggregationFunction)(vertexGroupByFunction)",
+      "user": "anonymous",
+      "dateUpdated": "Jan 10, 2018 12:52:25 AM",
+      "config": {
+        "colWidth": 6.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "vertexAggregationFunction: ((Int, Int, Int), (Int, Int, Int)) \u003d\u003e (Int, Int, Int) \u003d \u003cfunction2\u003e\nvertexGroupByFunction: (org.apache.spark.graphx.VertexId, (Int, Int, Int)) \u003d\u003e org.apache.spark.graphx.VertexId \u003d \u003cfunction2\u003e\nstructurallyAggregated: edu.drexel.cs.dbgroup.portal.representations.VEGraph[(Int, Int, Int),Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@69bd11c1\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1513880426561_-4586927",
+      "id": "20171221-182026_1764955160",
+      "dateCreated": "Dec 21, 2017 6:20:26 PM",
+      "dateStarted": "Jan 10, 2018 12:52:25 AM",
+      "dateFinished": "Jan 10, 2018 12:52:27 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Step 4: apply a basic graph centrality formula to the resultant evolving graph",
+      "text": "val graphCentralityCalculation: VEGraph[BigDecimal, Any] \u003d structurallyAggregated.vmap(\n  { case (_, _, (totalDegree, maxDegree, vertexCount)) \u003d\u003e BigDecimal(\n    ((vertexCount * maxDegree) - totalDegree).toDouble / ((vertexCount - 1)*(vertexCount - 2)).toDouble)},\n  0)",
+      "user": "anonymous",
+      "dateUpdated": "Jan 10, 2018 12:52:29 AM",
+      "config": {
+        "colWidth": 6.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "graphCentralityCalculation: edu.drexel.cs.dbgroup.portal.representations.VEGraph[BigDecimal,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@2a67a3df\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1513880564437_-1335069405",
+      "id": "20171221-182244_251406601",
+      "dateCreated": "Dec 21, 2017 6:22:44 PM",
+      "dateStarted": "Jan 10, 2018 12:52:29 AM",
+      "dateFinished": "Jan 10, 2018 12:52:29 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Perform some basic transformations to show the data visually",
+      "text": "val graphCentralityRows \u003d graphCentralityCalculation.vertices\n    .filter{ case (vid, (intv, centrality)) \u003d\u003e centrality \u003e 0.0000000001 }\n    .map{ case (vid, (intv, centrality)) \u003d\u003e Row(Date.valueOf(intv.start), Date.valueOf(intv.end), centrality)}\n\nval graphCentralityDf \u003d sqlContext.createDataFrame(graphCentralityRows, schema)\n\nimport org.apache.spark.sql.functions._\nval w \u003d Window.orderBy(col(\"Start\").asc)\n\nval withRow \u003d graphCentralityDf.withColumn(\"rank\", row_number().over(w))",
+      "user": "anonymous",
+      "dateUpdated": "Jan 10, 2018 12:55:54 AM",
+      "config": {
+        "colWidth": 6.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "tableHide": true,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "graphCentralityRows: org.apache.spark.rdd.RDD[org.apache.spark.sql.Row] \u003d MapPartitionsRDD[119] at map at \u003cconsole\u003e:95\ngraphCentralityDf: org.apache.spark.sql.DataFrame \u003d [Start: date, End: date ... 1 more field]\nimport org.apache.spark.sql.functions._\nw: org.apache.spark.sql.expressions.WindowSpec \u003d org.apache.spark.sql.expressions.WindowSpec@31a405ef\nwithRow: org.apache.spark.sql.DataFrame \u003d [Start: date, End: date ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1513880686460_-440712102",
+      "id": "20171221-182446_1953304278",
+      "dateCreated": "Dec 21, 2017 6:24:46 PM",
+      "dateStarted": "Jan 10, 2018 12:55:48 AM",
+      "dateFinished": "Jan 10, 2018 12:55:50 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Results",
+      "text": "z.show(withRow)",
+      "user": "anonymous",
+      "dateUpdated": "Jan 10, 2018 12:56:18 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "lineChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "lineChart": {
+                  "forceY": false,
+                  "lineWithFocus": false
+                },
+                "multiBarChart": {}
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "Start",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [
+                {
+                  "name": "GraphCentrality",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "title": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "Start\tEnd\tGraphCentrality\trank\n1938-01-01\t1939-01-01\t0.12500000000000000000000000000000000000\t1\n1940-01-01\t1941-01-01\t0.25000000000000000000000000000000000000\t2\n1942-01-01\t1943-01-01\t0.11111111111111110000000000000000000000\t3\n1945-01-01\t1946-01-01\t0.08333333333333333000000000000000000000\t4\n1946-01-01\t1947-01-01\t0.02643678160919540200000000000000000000\t5\n1947-01-01\t1948-01-01\t0.08333333333333333000000000000000000000\t6\n1948-01-01\t1949-01-01\t0.06043956043956044000000000000000000000\t7\n1949-01-01\t1950-01-01\t0.05263157894736842000000000000000000000\t8\n1950-01-01\t1951-01-01\t0.04678362573099415000000000000000000000\t9\n1951-01-01\t1952-01-01\t0.05147058823529411500000000000000000000\t10\n1952-01-01\t1953-01-01\t0.09558823529411764000000000000000000000\t11\n1954-01-01\t1955-01-01\t0.01805745554035567700000000000000000000\t12\n1955-01-01\t1956-01-01\t0.01913580246913580300000000000000000000\t13\n1956-01-01\t1957-01-01\t0.01584294122389744500000000000000000000\t14\n1957-01-01\t1958-01-01\t0.02348336594911937200000000000000000000\t15\n1958-01-01\t1959-01-01\t0.02268445839874411200000000000000000000\t16\n1959-01-01\t1960-01-01\t0.01758632793115551600000000000000000000\t17\n1960-01-01\t1961-01-01\t0.03389518283135304500000000000000000000\t18\n1961-01-01\t1962-01-01\t0.00911295911295911300000000000000000000\t19\n1962-01-01\t1963-01-01\t0.01748889955233762200000000000000000000\t20\n1963-01-01\t1964-01-01\t0.02046063150937252300000000000000000000\t21\n1964-01-01\t1965-01-01\t0.00658323018383532800000000000000000000\t22\n1965-01-01\t1966-01-01\t0.00673761223811107400000000000000000000\t23\n1966-01-01\t1967-01-01\t0.00784876421422678200000000000000000000\t24\n1967-01-01\t1968-01-01\t0.00406564859977051400000000000000000000\t25\n1968-01-01\t1969-01-01\t0.00613061523286039600000000000000000000\t26\n1969-01-01\t1970-01-01\t0.00404711164078024400000000000000000000\t27\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1513880857095_344003799",
+      "id": "20171221-182737_82208823",
+      "dateCreated": "Dec 21, 2017 6:27:37 PM",
+      "dateStarted": "Jan 10, 2018 12:55:55 AM",
+      "dateFinished": "Jan 10, 2018 12:55:56 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1513880902872_2062554543",
+      "id": "20171221-182822_1637974784",
+      "dateCreated": "Dec 21, 2017 6:28:22 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "SampleUseCases/GraphCentralityOverTime",
+  "id": "2D2YP6U68",
+  "angularObjects": {
+    "2CYWUJACM:shared_process": [],
+    "2D1EN4QZD:shared_process": [],
+    "2CZD71VF8:shared_process": [],
+    "2CZ37EUFT:shared_process": [],
+    "2CZBJT9XJ:shared_process": [],
+    "2CZ5H6JXQ:shared_process": [],
+    "2D12E1BMZ:shared_process": [],
+    "2CZZQVU59:shared_process": [],
+    "2D168XTGW:shared_process": [],
+    "2CYTH192P:shared_process": [],
+    "2CX3PZJZQ:shared_process": [],
+    "2CZTTJ1FV:shared_process": [],
+    "2CWNYDQ86:shared_process": [],
+    "2CZFHBZDG:shared_process": [],
+    "2CYHP3ZX4:shared_process": [],
+    "2CY96RJ1Y:shared_process": [],
+    "2CXRXM356:shared_process": [],
+    "2CY1N7Q3W:shared_process": [],
+    "2CZXKHW8J:shared_process": [],
+    "2CZE4C357:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}

@@ -1,0 +1,81 @@
+{
+  "paragraphs": [
+    {
+      "text": "z.show(\"\"\"%html\n\u003ch3\u003eIn this use case, we\u0027ll use TGraph\u0027s analytics functions to  calculate a pagerank trend for DBLP.\u003c/h3\u003e\n    \u003ch4\u003eFirst, we\u0027ll calculate the connected components over time.\u003c/h4\u003e\n    \u003ch4\u003eThen, we\u0027ll calculate pagerank, and view the nodes with the highest growth in their pagerank value over time  \u003c/h4\u003e\n\"\"\")\n\n",
+      "user": "anonymous",
+      "dateUpdated": "Jan 14, 2018 4:14:06 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eIn this use case, we\u0027ll use TGraph\u0027s analytics functions to  calculate a pagerank trend for DBLP.\u003c/h3\u003e\n    \u003ch4\u003eFirst, we\u0027ll calculate the connected components over time.\u003c/h4\u003e\n    \u003ch4\u003eThen, we\u0027ll calculate pagerank, and view the nodes with the highest growth in their pagerank value over time  \u003c/h4\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1514918287453_165481506",
+      "id": "20180102-183807_623403743",
+      "dateCreated": "Jan 2, 2018 6:38:07 PM",
+      "dateStarted": "Jan 12, 2018 12:49:49 AM",
+      "dateFinished": "Jan 12, 2018 12:50:06 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1515718189507_-239747257",
+      "id": "20180112-004949_1135078938",
+      "dateCreated": "Jan 12, 2018 12:49:49 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "SampleUseCases/Analytics",
+  "id": "2D2AFNQ7E",
+  "angularObjects": {
+    "2CYWUJACM:shared_process": [],
+    "2D1EN4QZD:shared_process": [],
+    "2CZD71VF8:shared_process": [],
+    "2CZ37EUFT:shared_process": [],
+    "2CZBJT9XJ:shared_process": [],
+    "2CZ5H6JXQ:shared_process": [],
+    "2D12E1BMZ:shared_process": [],
+    "2CZZQVU59:shared_process": [],
+    "2D168XTGW:shared_process": [],
+    "2CYTH192P:shared_process": [],
+    "2CX3PZJZQ:shared_process": [],
+    "2CZTTJ1FV:shared_process": [],
+    "2CWNYDQ86:shared_process": [],
+    "2CZFHBZDG:shared_process": [],
+    "2CYHP3ZX4:shared_process": [],
+    "2CY96RJ1Y:shared_process": [],
+    "2CXRXM356:shared_process": [],
+    "2CY1N7Q3W:shared_process": [],
+    "2CZXKHW8J:shared_process": [],
+    "2CZE4C357:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}

@@ -1,0 +1,284 @@
+{
+  "paragraphs": [
+    {
+      "text": "z.show(\"\"\"%html\n\u003ch3\u003eThe DBLP Dataset.\u003c/h3\u003e\n    \u003ch5\u003eWe will use this dataset in all of the sample use cases.\u003c/h4\u003e\n    \u003ch5\u003eIt represents collaborations between authors on academic works.\u003c/h4\u003e\n\u003ch4\u003eHere we see the structure of the data, and perform a basic analysis: Degree Distribution.\u003c/h3\u003e\n\"\"\")",
+      "user": "anonymous",
+      "dateUpdated": "Dec 21, 2017 6:58:35 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eThe DBLP Dataset.\u003c/h3\u003e\n    \u003ch5\u003eWe will use this dataset in all of the sample use cases.\u003c/h4\u003e\n    \u003ch5\u003eIt represents collaborations between authors on academic works.\u003c/h4\u003e\n\u003ch4\u003eHere we see the structure of the data, and perform a basic analysis: Degree Distribution.\u003c/h3\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1513882633592_-87135562",
+      "id": "20171221-185713_519254478",
+      "dateCreated": "Dec 21, 2017 6:57:13 PM",
+      "dateStarted": "Dec 21, 2017 6:58:33 PM",
+      "dateFinished": "Dec 21, 2017 6:58:33 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Node Data",
+      "text": "z.show(sqlContext.read.parquet(\"file:///zeppelin/dblp/nodes.parquet\").limit(100))",
+      "user": "anonymous",
+      "dateUpdated": "Jan 12, 2018 12:13:33 AM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "colWidth": 6.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "title": true,
+        "results": {
+          "1": {
+            "graph": {
+              "mode": "table",
+              "height": 214.0,
+              "optionOpen": false
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "vid\testart\teend\tname\n530567\t1994-01-01\t1996-01-01\tKevin D. Wentzel\n530567\t1992-01-01\t1993-01-01\tKevin D. Wentzel\n1292991\t2007-01-01\t2008-01-01\tDae-Yoo Kim\n1098446\t2009-01-01\t2014-01-01\tSadanori Konishi\n186574\t2010-01-01\t2011-01-01\tPolly Ng\n257320\t2014-01-01\t2015-01-01\tChao-Hua Huang\n257320\t2010-01-01\t2011-01-01\tChao-Hua Huang\n565862\t2008-01-01\t2009-01-01\tRobert R. de Ruyter van Steveninck\n565862\t2000-01-01\t2001-01-01\tRobert R. de Ruyter van Steveninck\n565862\t1996-01-01\t1997-01-01\tRobert R. de Ruyter van Steveninck\n565862\t1991-01-01\t1992-01-01\tRobert R. de Ruyter van Steveninck\n565862\t1989-01-01\t1990-01-01\tRobert R. de Ruyter van Steveninck\n565862\t1983-01-01\t1984-01-01\tRobert R. de Ruyter van Steveninck\n1133078\t2006-01-01\t2007-01-01\tCarlos André Carvalho\n321605\t2013-01-01\t2015-01-01\tPaula Viana\n321605\t2010-01-01\t2011-01-01\tPaula Viana\n321605\t1997-01-01\t1998-01-01\tPaula Viana\n693158\t2007-01-01\t2008-01-01\tChengzhong Luo\n170792\t2012-01-01\t2014-01-01\tCharles V. Stewart\n170792\t2010-01-01\t2011-01-01\tCharles V. Stewart\n170792\t1994-01-01\t2009-01-01\tCharles V. Stewart\n170792\t1988-01-01\t1989-01-01\tCharles V. Stewart\n841670\t2010-01-01\t2013-01-01\tCheng-Ting Chen\n875847\t1986-01-01\t1987-01-01\tRalph Zimmermann Jr.\n557347\t2010-01-01\t2011-01-01\tYohwan Kim\n1031093\t1999-01-01\t2000-01-01\tUlrich Kreuzeder\n1031093\t1995-01-01\t1996-01-01\tUlrich Kreuzeder\n1393130\t2006-01-01\t2007-01-01\tSheik S. Rahman\n81508\t1999-01-01\t2014-01-01\tNelson D. A. Mascarenhas\n81508\t1995-01-01\t1996-01-01\tNelson D. A. Mascarenhas\n81508\t1992-01-01\t1993-01-01\tNelson D. A. Mascarenhas\n81508\t1983-01-01\t1985-01-01\tNelson D. A. Mascarenhas\n81508\t1980-01-01\t1981-01-01\tNelson D. A. Mascarenhas\n197585\t2012-01-01\t2013-01-01\tYing-Tung Hsiao\n197585\t2005-01-01\t2007-01-01\tYing-Tung Hsiao\n1514017\t2005-01-01\t2006-01-01\tDaniel Fritschy\n314559\t1982-01-01\t1983-01-01\tJules J. Lambiotte Jr.\n314559\t1975-01-01\t1976-01-01\tJules J. Lambiotte Jr.\n1159533\t2013-01-01\t2014-01-01\tIgnacio Pagonabarraga\n1159533\t2008-01-01\t2009-01-01\tIgnacio Pagonabarraga\n1159533\t2005-01-01\t2006-01-01\tIgnacio Pagonabarraga\n1248713\t2012-01-01\t2013-01-01\tCarlos Romá-Mateo\n360241\t2013-01-01\t2014-01-01\tTomohiro Mizoguchi\n360241\t2010-01-01\t2012-01-01\tTomohiro Mizoguchi\n360241\t2006-01-01\t2007-01-01\tTomohiro Mizoguchi\n1451513\t1988-01-01\t1989-01-01\tCraig C. Wier\n399332\t2011-01-01\t2012-01-01\tMatthew Jaswa\n518906\t2010-01-01\t2015-01-01\tDominique Désérable\n518906\t2007-01-01\t2008-01-01\tDominique Désérable\n518906\t2002-01-01\t2003-01-01\tDominique Désérable\n518906\t1999-01-01\t2000-01-01\tDominique Désérable\n518906\t1997-01-01\t1998-01-01\tDominique Désérable\n518906\t1994-01-01\t1995-01-01\tDominique Désérable\n1412175\t2010-01-01\t2011-01-01\tConstantinos T. Artikis\n396823\t2008-01-01\t2009-01-01\tAlexandra Moutinho\n396823\t2005-01-01\t2007-01-01\tAlexandra Moutinho\n576041\t2006-01-01\t2007-01-01\tShmuel Shottan\n1481088\t2014-01-01\t2015-01-01\tRiadh Sahnoun\n85291\t2010-01-01\t2015-01-01\tHassan Ahmed\n85291\t2008-01-01\t2009-01-01\tHassan Ahmed\n85291\t2002-01-01\t2004-01-01\tHassan Ahmed\n1130556\t2010-01-01\t2011-01-01\tHsiang Ho\n114177\t2007-01-01\t2015-01-01\tSebastián Dormido\n114177\t2003-01-01\t2006-01-01\tSebastián Dormido\n114177\t1993-01-01\t1996-01-01\tSebastián Dormido\n114177\t1981-01-01\t1983-01-01\tSebastián Dormido\n831205\t2012-01-01\t2013-01-01\tMilosch Meriac\n394366\t2004-01-01\t2005-01-01\tAlexei Gruverman\n350894\t2010-01-01\t2011-01-01\tZhaolin Su\n12881\t2013-01-01\t2014-01-01\tMaya Bercovitch\n12881\t2011-01-01\t2012-01-01\tMaya Bercovitch\n61605\t2008-01-01\t2013-01-01\tMark ter Maat\n1483896\t2007-01-01\t2008-01-01\tZejun Li\n104635\t2012-01-01\t2015-01-01\tVicente R. Tomás\n104635\t2008-01-01\t2011-01-01\tVicente R. Tomás\n104635\t2005-01-01\t2006-01-01\tVicente R. Tomás\n1532516\t2005-01-01\t2006-01-01\tZoltán Károly Nagy\n16794\t1992-01-01\t2015-01-01\tFrank Leymann\n16794\t1989-01-01\t1991-01-01\tFrank Leymann\n758080\t2007-01-01\t2008-01-01\tSun Xiaoning\n380976\t2013-01-01\t2014-01-01\tMatthew Saponaro\n706743\t2003-01-01\t2004-01-01\tRahman Zarrintare\n1026881\t2014-01-01\t2015-01-01\tMihaela Sorostinean\n1102749\t2013-01-01\t2015-01-01\tTarandeep Kaur\n1102749\t2009-01-01\t2010-01-01\tTarandeep Kaur\n871193\t2014-01-01\t2016-01-01\tGuoquan Li\n871193\t2011-01-01\t2012-01-01\tGuoquan Li\n871193\t1991-01-01\t1992-01-01\tGuoquan Li\n63711\t2009-01-01\t2010-01-01\tKavin Tantipongsakul\n1519724\t2000-01-01\t2001-01-01\tHsiu-Chen Chung\n3118\t2012-01-01\t2014-01-01\tHugo Alatrista Salas\n1417804\t2005-01-01\t2006-01-01\tGyung-Ok Lee\n1417804\t1999-01-01\t2000-01-01\tGyung-Ok Lee\n1417804\t1997-01-01\t1998-01-01\tGyung-Ok Lee\n143362\t2013-01-01\t2015-01-01\tEric Roman\n143362\t2011-01-01\t2012-01-01\tEric Roman\n143362\t2005-01-01\t2007-01-01\tEric Roman\n1251313\t2010-01-01\t2011-01-01\tTim Warner\n1437525\t2004-01-01\t2005-01-01\tGernot Plevnik\n322177\t2015-01-01\t2016-01-01\tFrancesco Fedi\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1511312792132_-396739001",
+      "id": "20171122-010632_1083527536",
+      "dateCreated": "Nov 22, 2017 1:06:32 AM",
+      "dateStarted": "Nov 22, 2017 4:19:14 PM",
+      "dateFinished": "Nov 22, 2017 4:19:16 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Edge Data",
+      "text": "z.show(sqlContext.read.parquet(\"file:///zeppelin/dblp/edgeswids.parquet\").limit(100))",
+      "user": "anonymous",
+      "dateUpdated": "Jan 12, 2018 12:13:40 AM",
+      "config": {
+        "colWidth": 6.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "eid\tvid1\tvid2\testart\teend\n349\t6\t323086\t2000-01-01\t2001-01-01\n383\t7\t33383\t2010-01-01\t2011-01-01\n385\t7\t41701\t2001-01-01\t2002-01-01\n444\t7\t163392\t2001-01-01\t2002-01-01\n444\t7\t163392\t1995-01-01\t1996-01-01\n450\t7\t163919\t2003-01-01\t2004-01-01\n464\t7\t183277\t1997-01-01\t1999-01-01\n544\t11\t169227\t2007-01-01\t2008-01-01\n667\t22\t21\t2006-01-01\t2007-01-01\n856\t37\t446872\t2010-01-01\t2011-01-01\n874\t39\t260\t2011-01-01\t2012-01-01\n1057\t47\t154017\t2000-01-01\t2001-01-01\n1090\t48\t525908\t2012-01-01\t2013-01-01\n1239\t51\t127817\t2010-01-01\t2011-01-01\n1438\t59\t54931\t2007-01-01\t2008-01-01\n1490\t63\t17362\t2012-01-01\t2013-01-01\n1646\t66\t610723\t1995-01-01\t1996-01-01\n2273\t97\t35606\t2005-01-01\t2006-01-01\n2475\t103\t505320\t2008-01-01\t2009-01-01\n2475\t103\t505320\t2006-01-01\t2007-01-01\n2632\t105\t710325\t2005-01-01\t2006-01-01\n2812\t113\t158849\t2012-01-01\t2013-01-01\n3366\t137\t139\t2004-01-01\t2005-01-01\n3407\t138\t150740\t2013-01-01\t2014-01-01\n3407\t138\t150740\t2008-01-01\t2010-01-01\n3974\t168\t540632\t2014-01-01\t2015-01-01\n3974\t168\t540632\t2009-01-01\t2010-01-01\n4055\t171\t726959\t2012-01-01\t2013-01-01\n4128\t175\t39\t2005-01-01\t2007-01-01\n4149\t176\t231954\t2007-01-01\t2008-01-01\n4387\t183\t155470\t2009-01-01\t2010-01-01\n4389\t183\t181911\t2013-01-01\t2014-01-01\n4389\t183\t181911\t2010-01-01\t2012-01-01\n4389\t183\t181911\t2006-01-01\t2007-01-01\n4493\t190\t20324\t2005-01-01\t2006-01-01\n4773\t206\t132009\t2012-01-01\t2013-01-01\n4788\t207\t155912\t2011-01-01\t2012-01-01\n5028\t212\t83058\t2004-01-01\t2008-01-01\n5087\t214\t72429\t2005-01-01\t2006-01-01\n5209\t214\t709660\t2005-01-01\t2006-01-01\n5259\t216\t707189\t2008-01-01\t2010-01-01\n5344\t226\t72173\t2010-01-01\t2011-01-01\n5359\t226\t79979\t1997-01-01\t1998-01-01\n5474\t228\t75423\t2009-01-01\t2010-01-01\n5856\t240\t415104\t2012-01-01\t2014-01-01\n5856\t240\t415104\t2010-01-01\t2011-01-01\n6463\t268\t270\t2004-01-01\t2005-01-01\n6971\t280\t77392\t2011-01-01\t2012-01-01\n6971\t280\t77392\t2007-01-01\t2008-01-01\n6971\t280\t77392\t2004-01-01\t2005-01-01\n7522\t298\t20313\t2006-01-01\t2007-01-01\n7522\t298\t20313\t2004-01-01\t2005-01-01\n7851\t305\t745203\t2012-01-01\t2015-01-01\n7854\t305\t925532\t2013-01-01\t2015-01-01\n8109\t322\t158155\t2002-01-01\t2003-01-01\n8594\t357\t144398\t2010-01-01\t2015-01-01\n8594\t357\t144398\t1999-01-01\t2000-01-01\n8594\t357\t144398\t1996-01-01\t1997-01-01\n8594\t357\t144398\t1994-01-01\t1995-01-01\n8794\t375\t171266\t2007-01-01\t2008-01-01\n9013\t377\t462959\t2012-01-01\t2013-01-01\n9352\t392\t18324\t2011-01-01\t2012-01-01\n9523\t395\t200889\t2015-01-01\t2016-01-01\n9614\t398\t199366\t1999-01-01\t2000-01-01\n9908\t403\t332404\t2008-01-01\t2009-01-01\n10434\t413\t312231\t2012-01-01\t2013-01-01\n10518\t414\t134369\t2012-01-01\t2013-01-01\n10849\t419\t1287775\t2012-01-01\t2013-01-01\n11351\t455\t730695\t2006-01-01\t2007-01-01\n11554\t499\t177751\t2013-01-01\t2014-01-01\n11791\t528\t888021\t2011-01-01\t2012-01-01\n11804\t528\t1195549\t2008-01-01\t2009-01-01\n11814\t529\t1116335\t2007-01-01\t2008-01-01\n11879\t540\t776\t2012-01-01\t2014-01-01\n11879\t540\t776\t2010-01-01\t2011-01-01\n11890\t546\t1138167\t2013-01-01\t2014-01-01\n12062\t573\t575\t2014-01-01\t2015-01-01\n12642\t623\t1318364\t2005-01-01\t2006-01-01\n12770\t632\t816943\t2007-01-01\t2009-01-01\n12862\t651\t1318516\t2010-01-01\t2011-01-01\n12862\t651\t1318516\t2008-01-01\t2009-01-01\n13518\t780\t253845\t2004-01-01\t2005-01-01\n13577\t798\t14599\t2013-01-01\t2015-01-01\n13611\t799\t158632\t2014-01-01\t2015-01-01\n13821\t816\t120293\t2003-01-01\t2004-01-01\n13926\t821\t818\t2014-01-01\t2015-01-01\n13926\t821\t818\t2012-01-01\t2013-01-01\n14161\t837\t872\t2005-01-01\t2006-01-01\n14293\t842\t810236\t2008-01-01\t2009-01-01\n14333\t846\t388501\t2014-01-01\t2015-01-01\n14333\t846\t388501\t2012-01-01\t2013-01-01\n14452\t852\t385890\t2011-01-01\t2012-01-01\n14452\t852\t385890\t2009-01-01\t2010-01-01\n14453\t852\t389005\t2013-01-01\t2014-01-01\n14453\t852\t389005\t2010-01-01\t2011-01-01\n14588\t857\t214460\t2005-01-01\t2006-01-01\n14661\t857\t1017623\t2009-01-01\t2010-01-01\n14908\t874\t500547\t2011-01-01\t2012-01-01\n14962\t883\t850\t2012-01-01\t2013-01-01\n14962\t883\t850\t2010-01-01\t2011-01-01\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1511319414519_1571671880",
+      "id": "20171122-025654_974107187",
+      "dateCreated": "Nov 22, 2017 2:56:54 AM",
+      "dateStarted": "Nov 22, 2017 4:19:19 PM",
+      "dateFinished": "Nov 22, 2017 4:19:20 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Degree Distribution Code",
+      "text": "import java.sql.Date\nimport java.time.LocalDate\n\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Exists, Interval, Resolution, TimeSpec}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.{DataFrame, Row}\nimport org.apache.spark.sql.types._\n\nProgramContext.setContext(sc)\n\nval dblp \u003d GraphLoader.buildVE(\"file:///zeppelin/dblp\",1,1,Interval(LocalDate.parse(\"2000-01-01\"), LocalDate.MAX))\n\nval schema \u003d StructType(\n  StructField(\"Degree\", IntegerType, false) ::\n  StructField(\"Count\", IntegerType, false) :: Nil\n)\n\nval degreeDistribution \u003d\n  dblp\n    .createTemporalNodes(\n      TimeSpec(Resolution.between(dblp.span.start, dblp.span.end)),\n      Exists(),\n      Exists(),\n      (v1, _) \u003d\u003e v1,\n      (e1, _) \u003d\u003e e1\n    )\n    .aggregateMessages(\n      triplet \u003d\u003e Iterator((triplet.srcId, 1), (triplet.dstId, 1)),\n      (a: Int,b: Int) \u003d\u003e a + b,\n      0,\n      TripletFields.None\n    )\n   .asInstanceOf[VEGraph[(String, Int), Any]]\n   .vmap({case (vid, intv, (name, degree)) \u003d\u003e (degree, 1)}, (0, 1))\n   .asInstanceOf[VEGraph[(Int, Int),Any]]\n   .createAttributeNodes({case ((degree1, count1), (_, count2)) \u003d\u003e (degree1, count1 + count2) })({case (_, (degree: Int, _)) \u003d\u003e degree})\n   .vertices\n   .map { case (_, (_, (degree: Int, count))) \u003d\u003e Row(degree, count) }\n\nval df: DataFrame \u003d sqlContext.createDataFrame(degreeDistribution, schema)\n\nimport org.apache.spark.sql.functions._\n\nval w \u003d Window.orderBy(col(\"Degree\").desc)\n\nval withRow \u003d df.withColumn(\"rank\", row_number().over(w))\n",
+      "user": "anonymous",
+      "dateUpdated": "Jan 9, 2018 4:32:15 PM",
+      "config": {
+        "tableHide": true,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "colWidth": 6.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true,
+        "results": {
+          "1": {
+            "graph": {
+              "mode": "lineChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "lineChart": {}
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "Degree",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [
+                {
+                  "name": "Count",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Exists, Interval, Resolution, TimeSpec}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.{DataFrame, Row}\nimport org.apache.spark.sql.types._\ndblp: edu.drexel.cs.dbgroup.portal.representations.VEGraph[Any,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@444308a8\nschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(Degree,IntegerType,false), StructField(Count,IntegerType,false))\ndegreeDistribution: org.apache.spark.rdd.RDD[org.apache.spark.sql.Row] \u003d MapPartitionsRDD[780] at map at \u003cconsole\u003e:214\ndf: org.apache.spark.sql.DataFrame \u003d [Degree: int, Count: int]\nimport org.apache.spark.sql.functions._\nw: org.apache.spark.sql.expressions.WindowSpec \u003d org.apache.spark.sql.expressions.WindowSpec@4b98ffc1\nwithRow: org.apache.spark.sql.DataFrame \u003d [Degree: int, Count: int ... 1 more field]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1511312493675_147663200",
+      "id": "20171111-211648_1638258888",
+      "dateCreated": "Nov 22, 2017 1:01:33 AM",
+      "dateStarted": "Jan 9, 2018 4:32:15 PM",
+      "dateFinished": "Jan 9, 2018 4:34:42 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Degree Distribution Result",
+      "text": "z.show(withRow)",
+      "user": "anonymous",
+      "dateUpdated": "Jan 9, 2018 4:35:33 PM",
+      "config": {
+        "colWidth": 6.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "lineChart",
+              "height": 512.0,
+              "optionOpen": true
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "Degree\tCount\trank\n1911\t1\t1\n1420\t1\t2\n1407\t1\t3\n1318\t1\t4\n1294\t1\t5\n1272\t1\t6\n1255\t1\t7\n1199\t1\t8\n1190\t1\t9\n1184\t1\t10\n1150\t1\t11\n1126\t1\t12\n1069\t1\t13\n1060\t1\t14\n1050\t1\t15\n1014\t1\t16\n1002\t1\t17\n987\t1\t18\n986\t1\t19\n984\t1\t20\n944\t1\t21\n937\t1\t22\n936\t1\t23\n933\t1\t24\n930\t1\t25\n910\t1\t26\n896\t1\t27\n890\t1\t28\n885\t1\t29\n884\t1\t30\n877\t1\t31\n874\t1\t32\n863\t2\t33\n862\t2\t34\n860\t1\t35\n853\t2\t36\n845\t2\t37\n839\t1\t38\n837\t1\t39\n813\t1\t40\n810\t1\t41\n807\t1\t42\n802\t1\t43\n797\t1\t44\n793\t1\t45\n790\t1\t46\n776\t1\t47\n765\t2\t48\n758\t1\t49\n746\t1\t50\n737\t2\t51\n735\t1\t52\n731\t1\t53\n727\t1\t54\n725\t1\t55\n720\t1\t56\n717\t1\t57\n708\t1\t58\n694\t1\t59\n693\t1\t60\n690\t1\t61\n688\t1\t62\n686\t1\t63\n685\t1\t64\n683\t1\t65\n669\t1\t66\n668\t2\t67\n667\t1\t68\n664\t1\t69\n661\t1\t70\n658\t1\t71\n657\t2\t72\n656\t1\t73\n648\t2\t74\n633\t1\t75\n628\t1\t76\n627\t1\t77\n622\t1\t78\n620\t1\t79\n616\t1\t80\n614\t2\t81\n608\t2\t82\n605\t1\t83\n600\t2\t84\n599\t2\t85\n591\t1\t86\n590\t1\t87\n587\t1\t88\n586\t1\t89\n583\t1\t90\n580\t1\t91\n578\t1\t92\n576\t1\t93\n574\t1\t94\n572\t1\t95\n567\t1\t96\n565\t1\t97\n561\t2\t98\n560\t1\t99\n557\t1\t100\n556\t1\t101\n549\t1\t102\n548\t1\t103\n545\t1\t104\n543\t2\t105\n542\t1\t106\n540\t1\t107\n538\t2\t108\n537\t1\t109\n535\t1\t110\n534\t1\t111\n530\t1\t112\n529\t1\t113\n528\t2\t114\n524\t1\t115\n523\t1\t116\n522\t2\t117\n515\t1\t118\n513\t1\t119\n507\t3\t120\n505\t2\t121\n501\t1\t122\n499\t1\t123\n497\t1\t124\n496\t1\t125\n492\t2\t126\n491\t1\t127\n482\t1\t128\n481\t1\t129\n477\t1\t130\n467\t2\t131\n464\t1\t132\n461\t1\t133\n460\t2\t134\n459\t1\t135\n458\t2\t136\n457\t1\t137\n456\t2\t138\n455\t1\t139\n454\t2\t140\n448\t1\t141\n446\t2\t142\n443\t2\t143\n442\t1\t144\n441\t1\t145\n440\t2\t146\n439\t1\t147\n437\t1\t148\n433\t4\t149\n432\t1\t150\n431\t1\t151\n429\t1\t152\n427\t1\t153\n426\t1\t154\n425\t2\t155\n424\t1\t156\n423\t1\t157\n420\t1\t158\n419\t3\t159\n417\t2\t160\n416\t1\t161\n414\t2\t162\n412\t3\t163\n411\t2\t164\n410\t1\t165\n409\t2\t166\n408\t1\t167\n407\t1\t168\n406\t1\t169\n404\t3\t170\n403\t2\t171\n402\t4\t172\n400\t2\t173\n398\t2\t174\n397\t2\t175\n396\t1\t176\n394\t1\t177\n392\t1\t178\n391\t2\t179\n390\t1\t180\n389\t1\t181\n388\t1\t182\n386\t2\t183\n385\t2\t184\n384\t2\t185\n383\t2\t186\n381\t3\t187\n380\t4\t188\n379\t2\t189\n378\t2\t190\n376\t1\t191\n375\t1\t192\n374\t1\t193\n373\t2\t194\n372\t3\t195\n371\t1\t196\n370\t2\t197\n369\t2\t198\n368\t4\t199\n367\t2\t200\n366\t1\t201\n365\t1\t202\n364\t1\t203\n361\t7\t204\n360\t6\t205\n359\t3\t206\n358\t1\t207\n356\t2\t208\n355\t1\t209\n354\t1\t210\n353\t2\t211\n352\t1\t212\n350\t3\t213\n349\t3\t214\n348\t1\t215\n347\t2\t216\n346\t3\t217\n345\t1\t218\n344\t2\t219\n343\t2\t220\n342\t3\t221\n341\t5\t222\n340\t1\t223\n339\t3\t224\n338\t2\t225\n337\t1\t226\n336\t2\t227\n334\t1\t228\n333\t1\t229\n332\t2\t230\n331\t2\t231\n330\t6\t232\n329\t1\t233\n327\t4\t234\n326\t2\t235\n324\t2\t236\n323\t1\t237\n322\t5\t238\n321\t3\t239\n320\t2\t240\n319\t3\t241\n318\t6\t242\n317\t2\t243\n316\t4\t244\n315\t1\t245\n314\t3\t246\n313\t4\t247\n312\t2\t248\n311\t2\t249\n310\t2\t250\n309\t5\t251\n308\t1\t252\n307\t6\t253\n306\t2\t254\n305\t3\t255\n304\t4\t256\n303\t3\t257\n302\t3\t258\n301\t3\t259\n300\t1\t260\n299\t3\t261\n298\t5\t262\n297\t2\t263\n296\t4\t264\n295\t5\t265\n294\t4\t266\n293\t2\t267\n292\t5\t268\n291\t1\t269\n290\t2\t270\n289\t3\t271\n288\t3\t272\n287\t5\t273\n286\t5\t274\n285\t4\t275\n284\t1\t276\n283\t4\t277\n282\t3\t278\n281\t4\t279\n280\t9\t280\n279\t6\t281\n278\t3\t282\n277\t2\t283\n276\t5\t284\n275\t3\t285\n274\t1\t286\n273\t8\t287\n272\t5\t288\n271\t2\t289\n270\t4\t290\n269\t7\t291\n268\t8\t292\n267\t3\t293\n266\t3\t294\n265\t6\t295\n264\t1\t296\n263\t4\t297\n262\t3\t298\n261\t8\t299\n260\t5\t300\n259\t4\t301\n258\t7\t302\n257\t5\t303\n256\t6\t304\n255\t4\t305\n254\t8\t306\n253\t8\t307\n252\t4\t308\n251\t11\t309\n250\t6\t310\n249\t8\t311\n248\t5\t312\n247\t6\t313\n246\t6\t314\n245\t7\t315\n244\t6\t316\n243\t5\t317\n242\t8\t318\n241\t7\t319\n240\t5\t320\n239\t7\t321\n238\t9\t322\n237\t9\t323\n236\t6\t324\n235\t8\t325\n234\t9\t326\n233\t7\t327\n232\t9\t328\n231\t16\t329\n230\t7\t330\n229\t11\t331\n228\t11\t332\n227\t8\t333\n226\t3\t334\n225\t8\t335\n224\t14\t336\n223\t7\t337\n222\t15\t338\n221\t12\t339\n220\t13\t340\n219\t7\t341\n218\t11\t342\n217\t7\t343\n216\t10\t344\n215\t8\t345\n214\t6\t346\n213\t17\t347\n212\t13\t348\n211\t14\t349\n210\t10\t350\n209\t10\t351\n208\t12\t352\n207\t10\t353\n206\t16\t354\n205\t10\t355\n204\t8\t356\n203\t12\t357\n202\t9\t358\n201\t13\t359\n200\t10\t360\n199\t18\t361\n198\t19\t362\n197\t14\t363\n196\t19\t364\n195\t18\t365\n194\t23\t366\n193\t23\t367\n192\t23\t368\n191\t21\t369\n190\t19\t370\n189\t8\t371\n188\t22\t372\n187\t14\t373\n186\t24\t374\n185\t23\t375\n184\t14\t376\n183\t18\t377\n182\t17\t378\n181\t25\t379\n180\t28\t380\n179\t20\t381\n178\t29\t382\n177\t16\t383\n176\t20\t384\n175\t30\t385\n174\t21\t386\n173\t22\t387\n172\t28\t388\n171\t17\t389\n170\t18\t390\n169\t32\t391\n168\t16\t392\n167\t27\t393\n166\t43\t394\n165\t31\t395\n164\t30\t396\n163\t34\t397\n162\t25\t398\n161\t33\t399\n160\t28\t400\n159\t33\t401\n158\t30\t402\n157\t34\t403\n156\t37\t404\n155\t37\t405\n154\t34\t406\n153\t42\t407\n152\t46\t408\n151\t32\t409\n150\t42\t410\n149\t42\t411\n148\t42\t412\n147\t56\t413\n146\t45\t414\n145\t46\t415\n144\t50\t416\n143\t46\t417\n142\t55\t418\n141\t50\t419\n140\t46\t420\n139\t53\t421\n138\t67\t422\n137\t52\t423\n136\t75\t424\n135\t53\t425\n134\t67\t426\n133\t61\t427\n132\t71\t428\n131\t66\t429\n130\t77\t430\n129\t88\t431\n128\t77\t432\n127\t81\t433\n126\t87\t434\n125\t93\t435\n124\t91\t436\n123\t92\t437\n122\t101\t438\n121\t83\t439\n120\t97\t440\n119\t105\t441\n118\t188\t442\n117\t110\t443\n116\t98\t444\n115\t105\t445\n114\t99\t446\n113\t111\t447\n112\t108\t448\n111\t118\t449\n110\t105\t450\n109\t117\t451\n108\t129\t452\n107\t135\t453\n106\t140\t454\n105\t146\t455\n104\t149\t456\n103\t139\t457\n102\t140\t458\n101\t187\t459\n100\t152\t460\n99\t145\t461\n98\t183\t462\n97\t176\t463\n96\t169\t464\n95\t186\t465\n94\t196\t466\n93\t200\t467\n92\t191\t468\n91\t219\t469\n90\t209\t470\n89\t233\t471\n88\t231\t472\n87\t264\t473\n86\t243\t474\n85\t235\t475\n84\t264\t476\n83\t270\t477\n82\t258\t478\n81\t310\t479\n80\t268\t480\n79\t262\t481\n78\t366\t482\n77\t346\t483\n76\t323\t484\n75\t358\t485\n74\t412\t486\n73\t369\t487\n72\t408\t488\n71\t424\t489\n70\t465\t490\n69\t452\t491\n68\t501\t492\n67\t452\t493\n66\t494\t494\n65\t510\t495\n64\t552\t496\n63\t660\t497\n62\t584\t498\n61\t606\t499\n60\t630\t500\n59\t632\t501\n58\t688\t502\n57\t745\t503\n56\t758\t504\n55\t801\t505\n54\t864\t506\n53\t867\t507\n52\t895\t508\n51\t972\t509\n50\t960\t510\n49\t1130\t511\n48\t1082\t512\n47\t1225\t513\n46\t1297\t514\n45\t1291\t515\n44\t1295\t516\n43\t1525\t517\n42\t1582\t518\n41\t1672\t519\n40\t1644\t520\n39\t1853\t521\n38\t1923\t522\n37\t2013\t523\n36\t2229\t524\n35\t2232\t525\n34\t2500\t526\n33\t2708\t527\n32\t2954\t528\n31\t2953\t529\n30\t3203\t530\n29\t3538\t531\n28\t3828\t532\n27\t3965\t533\n26\t4575\t534\n25\t4803\t535\n24\t5223\t536\n23\t5823\t537\n22\t6196\t538\n21\t6934\t539\n20\t7640\t540\n19\t8657\t541\n18\t9406\t542\n17\t10480\t543\n16\t12007\t544\n15\t13562\t545\n14\t15842\t546\n13\t18360\t547\n12\t21295\t548\n11\t25222\t549\n10\t30056\t550\n9\t37450\t551\n8\t45629\t552\n7\t59093\t553\n6\t76061\t554\n5\t105093\t555\n4\t143410\t556\n3\t191191\t557\n2\t213421\t558\n1\t153607\t559\n0\t47786\t560\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1513810392874_-1512960128",
+      "id": "20171220-225312_1718730286",
+      "dateCreated": "Dec 20, 2017 10:53:12 PM",
+      "dateStarted": "Jan 9, 2018 4:35:33 PM",
+      "dateFinished": "Jan 9, 2018 4:35:46 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1511393639659_1252723354",
+      "id": "20171122-233359_356162831",
+      "dateCreated": "Nov 22, 2017 11:33:59 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "SampleUseCases/DBLPDataSet",
+  "id": "2D2FBQSPR",
+  "angularObjects": {
+    "2CYWUJACM:shared_process": [],
+    "2D1EN4QZD:shared_process": [],
+    "2CZD71VF8:shared_process": [],
+    "2CZ37EUFT:shared_process": [],
+    "2CZBJT9XJ:shared_process": [],
+    "2CZ5H6JXQ:shared_process": [],
+    "2D12E1BMZ:shared_process": [],
+    "2CZZQVU59:shared_process": [],
+    "2D168XTGW:shared_process": [],
+    "2CYTH192P:shared_process": [],
+    "2CX3PZJZQ:shared_process": [],
+    "2CZTTJ1FV:shared_process": [],
+    "2CWNYDQ86:shared_process": [],
+    "2CZFHBZDG:shared_process": [],
+    "2CYHP3ZX4:shared_process": [],
+    "2CY96RJ1Y:shared_process": [],
+    "2CXRXM356:shared_process": [],
+    "2CY1N7Q3W:shared_process": [],
+    "2CZXKHW8J:shared_process": [],
+    "2CZE4C357:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}
