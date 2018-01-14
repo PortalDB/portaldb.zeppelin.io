@@ -4,7 +4,7 @@
       "title": "Emtpy Graph",
       "text": "import edu.drexel.cs.dbgroup.portal.ProgramContext\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\n\nProgramContext.setContext(sc)\n\nval emptyVEGraph \u003d VEGraph.emptyGraph(\"Default\")",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:13:32 PM",
+      "dateUpdated": "Jan 14, 2018 7:32:48 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -26,7 +26,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import edu.drexel.cs.dbgroup.portal.ProgramContext\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nemptyVEGraph: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,Nothing] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@7a585650\n"
+            "data": "import edu.drexel.cs.dbgroup.portal.ProgramContext\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nemptyVEGraph: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,Nothing] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@7f789dd3\n"
           }
         ]
       },
@@ -34,8 +34,8 @@
       "jobName": "paragraph_1510434894154_35123016",
       "id": "20171111-211454_1237320186",
       "dateCreated": "Nov 11, 2017 9:14:54 PM",
-      "dateStarted": "Jan 2, 2018 7:13:32 PM",
-      "dateFinished": "Jan 2, 2018 7:13:33 PM",
+      "dateStarted": "Jan 14, 2018 7:32:48 PM",
+      "dateFinished": "Jan 14, 2018 7:33:06 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -43,7 +43,7 @@
       "title": "From RDDs",
       "text": "import java.time.LocalDate\n\nimport edu.drexel.cs.dbgroup.portal.{Interval, TEdge}\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport org.apache.spark.graphx._\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.storage.StorageLevel\n\nval users: RDD[(VertexId, (Interval, String))] \u003d sc.parallelize(Array(\n  (1L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Bob\")),\n  (2L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), \"Barbara\")),\n  (3L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2015-01-01\")), \"Clyde\")),\n  (4L, (Interval(LocalDate.parse(\"2011-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Debbie\")),\n  (5L, (Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Edward\"))\n))\n\nval friendships: RDD[(TEdge[Int])] \u003d sc.parallelize(Array(\n  TEdge[Int](1L, 1L, 2L, Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), 1),\n  TEdge[Int](2L, 2L, 3L, Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), 1),\n  TEdge[Int](3L, 3L, 4L, Interval(LocalDate.parse(\"2011-01-01\"), LocalDate.parse(\"2012-01-01\")), 1),\n  TEdge[Int](4L, 4L, 5L, Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2014-01-01\")), 1),\n  TEdge[Int](5L, 2L, 5L, Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2013-01-01\")), 1)\n))\n\nval VEG \u003d VEGraph.fromRDDs(users,friendships, \"Default\", StorageLevel.MEMORY_ONLY_SER)",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:13:34 PM",
+      "dateUpdated": "Jan 14, 2018 7:33:09 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -65,7 +65,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal.{Interval, TEdge}\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport org.apache.spark.graphx._\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.storage.StorageLevel\nusers: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d ParallelCollectionRDD[20] at parallelize at \u003cconsole\u003e:66\nfriendships: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[Int]] \u003d ParallelCollectionRDD[21] at parallelize at \u003cconsole\u003e:66\nVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,Int] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@511d67b7\n"
+            "data": "import java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal.{Interval, TEdge}\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport org.apache.spark.graphx._\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.storage.StorageLevel\nusers: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d ParallelCollectionRDD[2] at parallelize at \u003cconsole\u003e:38\nfriendships: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[Int]] \u003d ParallelCollectionRDD[3] at parallelize at \u003cconsole\u003e:38\nVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,Int] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@3b7e7ace\n"
           }
         ]
       },
@@ -73,8 +73,8 @@
       "jobName": "paragraph_1510435000180_-2026043596",
       "id": "20171111-211640_1358688239",
       "dateCreated": "Nov 11, 2017 9:16:40 PM",
-      "dateStarted": "Jan 2, 2018 7:13:34 PM",
-      "dateFinished": "Jan 2, 2018 7:13:36 PM",
+      "dateStarted": "Jan 14, 2018 7:33:09 PM",
+      "dateFinished": "Jan 14, 2018 7:33:12 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -82,7 +82,7 @@
       "title": "From DataFrames",
       "text": "import java.sql.Date\n\nimport org.apache.spark.sql.DataFrame\nimport sqlContext.implicits._\n\n/*\n * the vertex DataFrames should be in a format that includes a vertex ID, start and end interval dates, plus any properties to associat with the vertex\n */\ncase class VertexDF(vid: Long, start: java.sql.Date, end: java.sql.Date, name: String)\n/*\n * the edge DataFrames should be in a similar format, with unique ID\u0027s representing each edge as well, since TGraph\u0027s are multigraphs\n */\ncase class EdgeDF(eid: Long, vid1: Long, vid2: Long, start: java.sql.Date, end: java.sql.Date, count: Int)\n\nval vertexDfs: DataFrame \u003d users.map{\n  case (vertexId, (interval, attribute)) \u003d\u003e\n    VertexDF(\n      vertexId,\n      Date.valueOf(interval.start),\n      Date.valueOf(interval.end),\n      attribute\n    )\n}.toDF()\n\nval edgeDfs: DataFrame \u003d friendships.map{\n  friendship \u003d\u003e\n    EdgeDF(\n      friendship.eId,\n      friendship.srcId,\n      friendship.dstId,\n      Date.valueOf(friendship.interval.start),\n      Date.valueOf(friendship.interval.end),\n      friendship.attr\n    )\n}.toDF()\n\nval veGraphFromDataFrames \u003d VEGraph.fromDataFrames(vertexDfs, edgeDfs, \"Default\")",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:13:57 PM",
+      "dateUpdated": "Jan 14, 2018 7:33:19 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -104,7 +104,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import java.sql.Date\nimport org.apache.spark.sql.DataFrame\nimport sqlContext.implicits._\ndefined class VertexDF\ndefined class EdgeDF\nvertexDfs: org.apache.spark.sql.DataFrame \u003d [vid: bigint, start: date ... 2 more fields]\nedgeDfs: org.apache.spark.sql.DataFrame \u003d [eid: bigint, vid1: bigint ... 4 more fields]\nveGraphFromDataFrames: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,Nothing] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@3c720e8b\n"
+            "data": "import java.sql.Date\nimport org.apache.spark.sql.DataFrame\nimport sqlContext.implicits._\ndefined class VertexDF\ndefined class EdgeDF\nvertexDfs: org.apache.spark.sql.DataFrame \u003d [vid: bigint, start: date ... 2 more fields]\nedgeDfs: org.apache.spark.sql.DataFrame \u003d [eid: bigint, vid1: bigint ... 4 more fields]\nveGraphFromDataFrames: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,Nothing] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@53cdc237\n"
           }
         ]
       },
@@ -112,8 +112,8 @@
       "jobName": "paragraph_1510434939434_-802819573",
       "id": "20171111-211539_1520289238",
       "dateCreated": "Nov 11, 2017 9:15:39 PM",
-      "dateStarted": "Jan 2, 2018 7:13:57 PM",
-      "dateFinished": "Jan 2, 2018 7:14:00 PM",
+      "dateStarted": "Jan 14, 2018 7:33:19 PM",
+      "dateFinished": "Jan 14, 2018 7:33:26 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -121,7 +121,7 @@
       "title": "From Parquet",
       "text": "import java.sql.Date\nimport java.time.LocalDate\n\nimport scala.reflect.io.Directory\nimport scala.reflect.io.Path\nimport edu.drexel.cs.dbgroup.portal.{Interval, ProgramContext, TEdge}\nimport org.apache.spark.graphx.VertexId\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.sql.DataFrame\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\n\nProgramContext.setContext(sc)\n\nval parquetPath: Path \u003d Path(\"file:///zeppelin/parquet\")\nval directory \u003d Directory(parquetPath)\n\ndirectory.deleteRecursively()\n\nval users: RDD[(VertexId, (Interval, String))] \u003d sc.parallelize(Array(\n  (1L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Bob\")),\n  (2L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), \"Barbara\")),\n  (3L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2015-01-01\")), \"Clyde\")),\n  (4L, (Interval(LocalDate.parse(\"2011-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Debbie\")),\n  (5L, (Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Edward\"))\n))\n\nval friendships: RDD[(TEdge[Int])] \u003d sc.parallelize(Array(\n  TEdge[Int](1L, 1L, 2L, Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), 1),\n  TEdge[Int](2L, 2L, 3L, Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), 1),\n  TEdge[Int](3L, 3L, 4L, Interval(LocalDate.parse(\"2011-01-01\"), LocalDate.parse(\"2012-01-01\")), 1),\n  TEdge[Int](4L, 4L, 5L, Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2014-01-01\")), 1),\n  TEdge[Int](5L, 2L, 5L, Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2013-01-01\")), 1)\n))\n\nimport sqlContext.implicits._\n\n/*\n * the vertex DataFrames should be in a format that includes a vertex ID, start and end interval dates, plus any properties to associaet with the vertex\n * IMPORTANT: for parquet, the vid, estart, and eend column names matter!\n */\ncase class VertexDF(vid: Long, estart: java.sql.Date, eend: java.sql.Date, attr: String)\n/*\n * the edge DataFrames should be in a similar format, with unique ID\u0027s representing each edge as well, since TGraph\u0027s are multigraphs\n * IMPORTANT: for parquet, the eid, vid1, vid1, estart, and eend column names matter!\n */\ncase class EdgeDF(eid: Long, vid1: Long, vid2: Long, estart: java.sql.Date, eend: java.sql.Date, attr: Int)\n\nval vertexDfs: DataFrame \u003d users.map{\n  case (vertexId, (interval, attribute)) \u003d\u003e\n    VertexDF(\n      vertexId,\n      Date.valueOf(interval.start),\n      Date.valueOf(interval.end),\n      attribute\n    )\n}.toDF()\n\nval edgeDfs: DataFrame \u003d friendships.map{\n  friendship \u003d\u003e\n    EdgeDF(\n      friendship.eId,\n      friendship.srcId,\n      friendship.dstId,\n      Date.valueOf(friendship.interval.start),\n      Date.valueOf(friendship.interval.end),\n      friendship.attr\n    )\n}.toDF()\n\n// now we can save the dataframes to disk in the form of parquet files\n\nvertexDfs.write.parquet(\"file:///zeppelin/parquet/nodes.parquet\")\nedgeDfs.write.parquet(\"file:///zeppelin/parquet/edgeswids.parquet\")\n\nval veGraphFromParquet \u003d GraphLoader.buildVE(\"file:///zeppelin\",1,1,Interval(LocalDate.MIN,LocalDate.MAX))",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:14:09 PM",
+      "dateUpdated": "Jan 14, 2018 7:33:34 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -143,7 +143,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport scala.reflect.io.Directory\nimport scala.reflect.io.Path\nimport edu.drexel.cs.dbgroup.portal.{Interval, ProgramContext, TEdge}\nimport org.apache.spark.graphx.VertexId\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.sql.DataFrame\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nparquetPath: scala.reflect.io.Path \u003d file:/zeppelin/parquet\ndirectory: scala.reflect.io.Directory \u003d file:/zeppelin/parquet\nres50: Boolean \u003d false\nusers: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d ParallelCollectionRDD[34] at parallelize at \u003cconsole\u003e:80\nfriendships: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[Int]] \u003d ParallelCollectionRDD[35] at parallelize at \u003cconsole\u003e:80\nimport sqlContext.implicits._\ndefined class VertexDF\ndefined class EdgeDF\nvertexDfs: org.apache.spark.sql.DataFrame \u003d [vid: bigint, estart: date ... 2 more fields]\nedgeDfs: org.apache.spark.sql.DataFrame \u003d [eid: bigint, vid1: bigint ... 4 more fields]\norg.apache.spark.sql.AnalysisException: path file:/zeppelin/parquet/nodes.parquet already exists.;\n  at org.apache.spark.sql.execution.datasources.InsertIntoHadoopFsRelationCommand.run(InsertIntoHadoopFsRelationCommand.scala:106)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.sideEffectResult$lzycompute(commands.scala:58)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.sideEffectResult(commands.scala:56)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.doExecute(commands.scala:74)\n  at org.apache.spark.sql.execution.SparkPlan$$anonfun$execute$1.apply(SparkPlan.scala:117)\n  at org.apache.spark.sql.execution.SparkPlan$$anonfun$execute$1.apply(SparkPlan.scala:117)\n  at org.apache.spark.sql.execution.SparkPlan$$anonfun$executeQuery$1.apply(SparkPlan.scala:138)\n  at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:151)\n  at org.apache.spark.sql.execution.SparkPlan.executeQuery(SparkPlan.scala:135)\n  at org.apache.spark.sql.execution.SparkPlan.execute(SparkPlan.scala:116)\n  at org.apache.spark.sql.execution.QueryExecution.toRdd$lzycompute(QueryExecution.scala:92)\n  at org.apache.spark.sql.execution.QueryExecution.toRdd(QueryExecution.scala:92)\n  at org.apache.spark.sql.execution.datasources.DataSource.writeInFileFormat(DataSource.scala:438)\n  at org.apache.spark.sql.execution.datasources.DataSource.write(DataSource.scala:474)\n  at org.apache.spark.sql.execution.datasources.SaveIntoDataSourceCommand.run(SaveIntoDataSourceCommand.scala:48)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.sideEffectResult$lzycompute(commands.scala:58)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.sideEffectResult(commands.scala:56)\n  at org.apache.spark.sql.execution.command.ExecutedCommandExec.doExecute(commands.scala:74)\n  at org.apache.spark.sql.execution.SparkPlan$$anonfun$execute$1.apply(SparkPlan.scala:117)\n  at org.apache.spark.sql.execution.SparkPlan$$anonfun$execute$1.apply(SparkPlan.scala:117)\n  at org.apache.spark.sql.execution.SparkPlan$$anonfun$executeQuery$1.apply(SparkPlan.scala:138)\n  at org.apache.spark.rdd.RDDOperationScope$.withScope(RDDOperationScope.scala:151)\n  at org.apache.spark.sql.execution.SparkPlan.executeQuery(SparkPlan.scala:135)\n  at org.apache.spark.sql.execution.SparkPlan.execute(SparkPlan.scala:116)\n  at org.apache.spark.sql.execution.QueryExecution.toRdd$lzycompute(QueryExecution.scala:92)\n  at org.apache.spark.sql.execution.QueryExecution.toRdd(QueryExecution.scala:92)\n  at org.apache.spark.sql.DataFrameWriter.runCommand(DataFrameWriter.scala:610)\n  at org.apache.spark.sql.DataFrameWriter.save(DataFrameWriter.scala:233)\n  at org.apache.spark.sql.DataFrameWriter.save(DataFrameWriter.scala:217)\n  at org.apache.spark.sql.DataFrameWriter.parquet(DataFrameWriter.scala:509)\n  ... 58 elided\n"
+            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport scala.reflect.io.Directory\nimport scala.reflect.io.Path\nimport edu.drexel.cs.dbgroup.portal.{Interval, ProgramContext, TEdge}\nimport org.apache.spark.graphx.VertexId\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.sql.DataFrame\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nparquetPath: scala.reflect.io.Path \u003d file:/zeppelin/parquet\ndirectory: scala.reflect.io.Directory \u003d file:/zeppelin/parquet\nres19: Boolean \u003d false\nusers: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d ParallelCollectionRDD[16] at parallelize at \u003cconsole\u003e:54\nfriendships: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[Int]] \u003d ParallelCollectionRDD[17] at parallelize at \u003cconsole\u003e:54\nimport sqlContext.implicits._\ndefined class VertexDF\ndefined class EdgeDF\nvertexDfs: org.apache.spark.sql.DataFrame \u003d [vid: bigint, estart: date ... 2 more fields]\nedgeDfs: org.apache.spark.sql.DataFrame \u003d [eid: bigint, vid1: bigint ... 4 more fields]\norg.apache.spark.sql.AnalysisException: Unable to infer schema for Parquet. It must be specified manually.;\n  at org.apache.spark.sql.execution.datasources.DataSource$$anonfun$8.apply(DataSource.scala:182)\n  at org.apache.spark.sql.execution.datasources.DataSource$$anonfun$8.apply(DataSource.scala:182)\n  at scala.Option.getOrElse(Option.scala:121)\n  at org.apache.spark.sql.execution.datasources.DataSource.getOrInferFileFormatSchema(DataSource.scala:181)\n  at org.apache.spark.sql.execution.datasources.DataSource.resolveRelation(DataSource.scala:366)\n  at org.apache.spark.sql.DataFrameReader.load(DataFrameReader.scala:178)\n  at org.apache.spark.sql.DataFrameReader.parquet(DataFrameReader.scala:559)\n  at edu.drexel.cs.dbgroup.portal.util.GraphLoader$.loadDataParquet(GraphLoader.scala:174)\n  at edu.drexel.cs.dbgroup.portal.util.GraphLoader$.buildVE(GraphLoader.scala:157)\n  ... 52 elided\n"
           }
         ]
       },
@@ -151,8 +151,8 @@
       "jobName": "paragraph_1510435008888_494461773",
       "id": "20171111-211648_1638258888",
       "dateCreated": "Nov 11, 2017 9:16:48 PM",
-      "dateStarted": "Jan 2, 2018 7:14:09 PM",
-      "dateFinished": "Jan 2, 2018 7:14:14 PM",
+      "dateStarted": "Jan 14, 2018 7:33:34 PM",
+      "dateFinished": "Jan 14, 2018 7:33:43 PM",
       "status": "ERROR",
       "progressUpdateIntervalMs": 500
     },

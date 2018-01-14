@@ -1,6 +1,6 @@
 FROM apache/zeppelin:0.7.3
 
-COPY temporal-graph-project_2.11-1.0.jar ${Z_HOME}
+COPY portal_2.11-1.0.jar ${Z_HOME}
 COPY portal-assembly-1.0.jar ${Z_HOME}
 COPY dblp ${Z_HOME}/dblp
 

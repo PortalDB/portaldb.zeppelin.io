@@ -135,7 +135,7 @@
       ],
       "dependencies": [
         {
-          "groupArtifactVersion": "portal-assembly-1.0.jar",
+          "groupArtifactVersion": "portal_2.11-1.0.jar",
           "local": false
         }
       ],
@@ -217,13 +217,13 @@
       "name": "kylin",
       "group": "kylin",
       "properties": {
-        "kylin.api.user": "ADMIN",
-        "kylin.api.password": "KYLIN",
         "kylin.query.limit": "5000",
+        "kylin.api.password": "KYLIN",
+        "kylin.api.user": "ADMIN",
         "kylin.query.offset": "0",
         "kylin.query.project": "learn_kylin",
-        "kylin.api.url": "http://localhost:7070/kylin/api/query",
-        "kylin.query.ispartial": "true"
+        "kylin.query.ispartial": "true",
+        "kylin.api.url": "http://localhost:7070/kylin/api/query"
       },
       "status": "READY",
       "interpreterGroup": [
@@ -374,9 +374,9 @@
       "name": "pig",
       "group": "pig",
       "properties": {
-        "zeppelin.pig.execType": "mapreduce",
-        "zeppelin.pig.includeJobStats": "false",
         "SPARK_MASTER": "local",
+        "zeppelin.pig.includeJobStats": "false",
+        "zeppelin.pig.execType": "mapreduce",
         "zeppelin.pig.maxResult": "1000",
         "SPARK_JAR": ""
       },
@@ -418,10 +418,10 @@
       "name": "psql",
       "group": "psql",
       "properties": {
-        "postgresql.password": "",
         "postgresql.driver.name": "org.postgresql.Driver",
-        "postgresql.max.result": "1000",
+        "postgresql.password": "",
         "postgresql.url": "jdbc:postgresql://localhost:5432/",
+        "postgresql.max.result": "1000",
         "postgresql.user": "gpadmin"
       },
       "status": "READY",
@@ -467,19 +467,19 @@
         "cassandra.pooling.core.connection.per.host.remote": "1",
         "cassandra.pooling.max.request.per.connection.remote": "256",
         "cassandra.cluster": "Test Cluster",
-        "cassandra.speculative.execution.policy": "DEFAULT",
         "cassandra.pooling.max.request.per.connection.local": "1024",
+        "cassandra.speculative.execution.policy": "DEFAULT",
         "cassandra.compression.protocol": "NONE",
         "cassandra.query.default.fetchSize": "5000",
-        "cassandra.keyspace": "system",
-        "cassandra.pooling.idle.timeout.seconds": "120",
         "cassandra.ssl.truststore.password": "none",
-        "cassandra.credentials.username": "none",
-        "cassandra.max.schema.agreement.wait.second": "10",
+        "cassandra.pooling.idle.timeout.seconds": "120",
+        "cassandra.keyspace": "system",
         "cassandra.socket.tcp.no_delay": "true",
-        "cassandra.interpreter.parallelism": "10",
-        "cassandra.query.default.serial.consistency": "SERIAL",
+        "cassandra.max.schema.agreement.wait.second": "10",
+        "cassandra.credentials.username": "none",
         "cassandra.socket.connection.timeout.millisecs": "5000",
+        "cassandra.query.default.serial.consistency": "SERIAL",
+        "cassandra.interpreter.parallelism": "10",
         "cassandra.pooling.max.connection.per.host.remote": "2",
         "cassandra.pooling.heartbeat.interval.seconds": "30",
         "cassandra.reconnection.policy": "DEFAULT",
@@ -513,9 +513,9 @@
       "name": "elasticsearch",
       "group": "elasticsearch",
       "properties": {
-        "elasticsearch.port": "9300",
-        "elasticsearch.result.size": "10",
         "elasticsearch.basicauth.password": "",
+        "elasticsearch.result.size": "10",
+        "elasticsearch.port": "9300",
         "elasticsearch.cluster.name": "elasticsearch",
         "elasticsearch.host": "localhost",
         "elasticsearch.basicauth.username": "",
@@ -554,8 +554,8 @@
         "zeppelin.spark.printREPLOutput": "true",
         "spark.cores.max": "",
         "zeppelin.dep.additionalRemoteRepository": "spark-packages,http://dl.bintray.com/spark-packages/maven,false;",
-        "zeppelin.spark.importImplicit": "true",
         "zeppelin.spark.sql.stacktrace": "false",
+        "zeppelin.spark.importImplicit": "true",
         "zeppelin.spark.concurrentSQL": "false",
         "zeppelin.spark.useHiveContext": "true",
         "zeppelin.pyspark.python": "python",
@@ -715,8 +715,8 @@
       "name": "file",
       "group": "file",
       "properties": {
-        "hdfs.user": "hdfs",
         "hdfs.maxlength": "1000",
+        "hdfs.user": "hdfs",
         "hdfs.url": "http://localhost:50070/webhdfs/v1/"
       },
       "status": "READY",
@@ -789,8 +789,8 @@
       "properties": {
         "lens.session.cluster.user": "default",
         "zeppelin.lens.maxResults": "1000",
-        "lens.client.dbname": "default",
         "lens.query.enable.persistent.resultset": "false",
+        "lens.client.dbname": "default",
         "zeppelin.lens.maxThreads": "10",
         "lens.server.base.url": "http://\u003chostname\u003e:\u003cport\u003e/lensapi",
         "zeppelin.lens.run.concurrent": "true"
@@ -869,8 +869,8 @@
       "group": "bigquery",
       "properties": {
         "zeppelin.bigquery.max_no_of_rows": "100000",
-        "zeppelin.bigquery.project_id": " ",
-        "zeppelin.bigquery.wait_time": "5000"
+        "zeppelin.bigquery.wait_time": "5000",
+        "zeppelin.bigquery.project_id": " "
       },
       "status": "READY",
       "interpreterGroup": [

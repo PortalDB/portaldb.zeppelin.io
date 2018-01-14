@@ -40,7 +40,7 @@
       "title": "Top Collaborators Code",
       "text": "import java.sql.Date\nimport java.time.LocalDate\n\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Exists, Interval, Resolution, TimeSpec}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.{DataFrame, Row}\nimport org.apache.spark.sql.types._\n\nval dblp \u003d GraphLoader.buildVE(\"file:///zeppelin/dblp\",1,1,Interval(LocalDate.parse(\"1985-01-01\"), LocalDate.MAX))\n\nval schema \u003d StructType(\n  StructField(\"VID\", LongType, false) ::\n  StructField(\"Start\", DateType, false) ::\n  StructField(\"End\", DateType, false) ::\n  StructField(\"Name\", StringType, false) ::\n  StructField(\"Degree\", IntegerType, false) :: Nil\n)\n\nval lifetimeDegrees \u003d\n  dblp\n    .createTemporalNodes(\n      TimeSpec(Resolution.between(dblp.span.start, dblp.span.end)),\n      Exists(),\n      Exists(),\n      (v1, _) \u003d\u003e v1,\n      (e1, _) \u003d\u003e e1\n    )\n    .aggregateMessages(\n      triplet \u003d\u003e Iterator((triplet.srcId, 1), (triplet.dstId, 1)),\n      (a: Int,b: Int) \u003d\u003e a + b,\n      0,\n      TripletFields.None\n    )\n    .asInstanceOf[VEGraph[(String, Int), Any]]\n    .vertices\n    .map{case (vid, (interval, (name, degree))) \u003d\u003e Row(vid, Date.valueOf(interval.start), Date.valueOf(interval.end), name, degree)}\n\nval df: DataFrame \u003d sqlContext.createDataFrame(lifetimeDegrees,schema)\n\nimport org.apache.spark.sql.functions._\n\nval w \u003d Window.orderBy(col(\"Degree\").desc)\n\nval withRow \u003d df.withColumn(\"rank\", row_number().over(w)).limit(5)\n\nval topAuthorRDD \u003d withRow.select(\"VID\").rdd.map(r \u003d\u003e r(0))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:50:28 PM",
+      "dateUpdated": "Jan 14, 2018 7:38:54 PM",
       "config": {
         "tableHide": true,
         "editorSetting": {
@@ -79,7 +79,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Exists, Interval, Resolution, TimeSpec}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.{DataFrame, Row}\nimport org.apache.spark.sql.types._\ndblp: edu.drexel.cs.dbgroup.portal.representations.VEGraph[Any,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@70737bc7\nschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(VID,LongType,false), StructField(Start,DateType,false), StructField(End,DateType,false), StructField(Name,StringType,false), StructField(Degree,IntegerType,false))\nlifetimeDegrees: org.apache.spark.rdd.RDD[org.apache.spark.sql.Row] \u003d MapPartitionsRDD[828] at map at \u003cconsole\u003e:225\ndf: org.apache.spark.sql.DataFrame \u003d [VID: bigint, Start: date ... 3 more fields]\nimport org.apache.spark.sql.functions._\nw: org.apache.spark.sql.expressions.WindowSpec \u003d org.apache.spark.sql.expressions.WindowSpec@88f4e9a\nwithRow: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [VID: bigint, Start: date ... 4 more fields]\ntopAuthorRDD: org.apache.spark.rdd.RDD[Any] \u003d MapPartitionsRDD[837] at map at \u003cconsole\u003e:223\n"
+            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Exists, Interval, Resolution, TimeSpec}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.{DataFrame, Row}\nimport org.apache.spark.sql.types._\ndblp: edu.drexel.cs.dbgroup.portal.representations.VEGraph[Any,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@a821f6a\nschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(VID,LongType,false), StructField(Start,DateType,false), StructField(End,DateType,false), StructField(Name,StringType,false), StructField(Degree,IntegerType,false))\nlifetimeDegrees: org.apache.spark.rdd.RDD[org.apache.spark.sql.Row] \u003d MapPartitionsRDD[581] at map at \u003cconsole\u003e:116\ndf: org.apache.spark.sql.DataFrame \u003d [VID: bigint, Start: date ... 3 more fields]\nimport org.apache.spark.sql.functions._\nw: org.apache.spark.sql.expressions.WindowSpec \u003d org.apache.spark.sql.expressions.WindowSpec@212e7fe1\nwithRow: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [VID: bigint, Start: date ... 4 more fields]\ntopAuthorRDD: org.apache.spark.rdd.RDD[Any] \u003d MapPartitionsRDD[590] at map at \u003cconsole\u003e:112\n"
           }
         ]
       },
@@ -87,8 +87,8 @@
       "jobName": "paragraph_1511829068314_-1278548684",
       "id": "20171111-211648_1638258888",
       "dateCreated": "Nov 28, 2017 12:31:08 AM",
-      "dateStarted": "Jan 9, 2018 4:50:28 PM",
-      "dateFinished": "Jan 9, 2018 4:50:35 PM",
+      "dateStarted": "Jan 14, 2018 7:38:54 PM",
+      "dateFinished": "Jan 14, 2018 7:38:58 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -96,7 +96,7 @@
       "title": "Top Collaborators Result",
       "text": "z.show(withRow)",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:54:16 PM",
+      "dateUpdated": "Jan 14, 2018 7:39:02 PM",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -150,18 +150,18 @@
       "jobName": "paragraph_1513810784375_72004482",
       "id": "20171220-225944_1589894856",
       "dateCreated": "Dec 20, 2017 10:59:44 PM",
-      "dateStarted": "Jan 9, 2018 4:50:40 PM",
-      "dateFinished": "Jan 9, 2018 4:52:38 PM",
+      "dateStarted": "Jan 14, 2018 7:39:02 PM",
+      "dateFinished": "Jan 14, 2018 7:40:59 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "title": "Vertex Influence Over Time (Top 5) Code",
-      "text": "import java.sql.Date\nimport java.time.LocalDate\n\nimport edu.drexel.cs.dbgroup.temporalgraph.representations.VEGraph\nimport edu.drexel.cs.dbgroup.temporalgraph.util.GraphLoader\nimport edu.drexel.cs.dbgroup.temporalgraph.{Interval, ProgramContext}\nimport org.apache.log4j.{Level, Logger}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.types._\nimport org.apache.spark.sql.{Row, SQLContext}\n\nProgramContext.setContext(sc)\n\nval schema \u003d StructType(\n  StructField(\"Name\", StringType, false) ::\n    StructField(\"Year\", DateType, false) ::\n    StructField(\"Collaborations\", IntegerType, false) :: Nil\n)\n\nval topAuthorVids \u003d Set(31299L, 25939L, 8676L, 27953L, 7766L)\n\nval aggEdges \u003d\n  dblp\n    .esubgraph({ triplet \u003d\u003e topAuthorVids.contains(triplet.srcId) || topAuthorVids.contains(triplet.dstId) })\n    .aggregateMessages(\n      triplet \u003d\u003e {\n        val srcCount \u003d if (topAuthorVids.contains(triplet.srcId)) 1 else 0\n        val dstcount \u003d if (topAuthorVids.contains(triplet.dstId)) 1 else 0\n        Iterator((triplet.srcId, srcCount), (triplet.dstId, dstcount))\n      },\n      (a: Int,b: Int) \u003d\u003e a + b,\n      0,\n      TripletFields.None\n)\n\n\nval lifetimeDegrees \u003d\n  aggEdges\n    .vertices.filter(v \u003d\u003e topAuthorVids.contains(v._1))\n    .map { case (vid, (interval, (name, degree))) \u003d\u003e Row(name, Date.valueOf(interval.start), degree) }\n\n\nval frames \u003d sqlContext.createDataFrame(lifetimeDegrees, schema).sort(\"Year\")",
+      "text": "import java.sql.Date\nimport java.time.LocalDate\n\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Interval, ProgramContext}\nimport org.apache.log4j.{Level, Logger}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.types._\nimport org.apache.spark.sql.{Row, SQLContext}\n\nProgramContext.setContext(sc)\n\nval schema \u003d StructType(\n  StructField(\"Name\", StringType, false) ::\n    StructField(\"Year\", DateType, false) ::\n    StructField(\"Collaborations\", IntegerType, false) :: Nil\n)\n\nval topAuthorVids \u003d Set(31299L, 25939L, 8676L, 27953L, 7766L)\n\nval aggEdges \u003d\n  dblp\n    .esubgraph({ triplet \u003d\u003e topAuthorVids.contains(triplet.srcId) || topAuthorVids.contains(triplet.dstId) })\n    .aggregateMessages(\n      triplet \u003d\u003e {\n        val srcCount \u003d if (topAuthorVids.contains(triplet.srcId)) 1 else 0\n        val dstcount \u003d if (topAuthorVids.contains(triplet.dstId)) 1 else 0\n        Iterator((triplet.srcId, srcCount), (triplet.dstId, dstcount))\n      },\n      (a: Int,b: Int) \u003d\u003e a + b,\n      0,\n      TripletFields.None\n)\n\n\nval lifetimeDegrees \u003d\n  aggEdges\n    .vertices.filter(v \u003d\u003e topAuthorVids.contains(v._1))\n    .map { case (vid, (interval, (name, degree))) \u003d\u003e Row(name, Date.valueOf(interval.start), degree) }\n\n\nval frames \u003d sqlContext.createDataFrame(lifetimeDegrees, schema).sort(\"Year\")",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:54:50 PM",
+      "dateUpdated": "Jan 14, 2018 7:42:06 PM",
       "config": {
-        "tableHide": true,
+        "tableHide": false,
         "editorSetting": {
           "language": "scala"
         },
@@ -215,7 +215,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport edu.drexel.cs.dbgroup.temporalgraph.representations.VEGraph\nimport edu.drexel.cs.dbgroup.temporalgraph.util.GraphLoader\nimport edu.drexel.cs.dbgroup.temporalgraph.{Interval, ProgramContext}\nimport org.apache.log4j.{Level, Logger}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.types._\nimport org.apache.spark.sql.{Row, SQLContext}\nschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(Name,StringType,false), StructField(Year,DateType,false), StructField(Collaborations,IntegerType,false))\ntopAuthorVids: scala.collection.immutable.Set[Long] \u003d Set(7766, 8676, 27953, 25939, 31299)\naggEdges: edu.drexel.cs.dbgroup.portal.representations.VEGraph[(Any, Int),Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@776fe783\nlifetimeDegrees: org.apache.spark.rdd.RDD[org.apache.spark.sql.Row] \u003d MapPartitionsRDD[888] at map at \u003cconsole\u003e:241\nframes: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Name: string, Year: date ... 1 more field]\n"
+            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Interval, ProgramContext}\nimport org.apache.log4j.{Level, Logger}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.types._\nimport org.apache.spark.sql.{Row, SQLContext}\nschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(Name,StringType,false), StructField(Year,DateType,false), StructField(Collaborations,IntegerType,false))\ntopAuthorVids: scala.collection.immutable.Set[Long] \u003d Set(7766, 8676, 27953, 25939, 31299)\naggEdges: edu.drexel.cs.dbgroup.portal.representations.VEGraph[(Any, Int),Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@4f82561a\nlifetimeDegrees: org.apache.spark.rdd.RDD[org.apache.spark.sql.Row] \u003d MapPartitionsRDD[618] at map at \u003cconsole\u003e:123\nframes: org.apache.spark.sql.Dataset[org.apache.spark.sql.Row] \u003d [Name: string, Year: date ... 1 more field]\n"
           }
         ]
       },
@@ -223,8 +223,8 @@
       "jobName": "paragraph_1511829068315_-1278933433",
       "id": "20171115-184512_1126275549",
       "dateCreated": "Nov 28, 2017 12:31:08 AM",
-      "dateStarted": "Jan 9, 2018 4:54:50 PM",
-      "dateFinished": "Jan 9, 2018 4:54:56 PM",
+      "dateStarted": "Jan 14, 2018 7:42:06 PM",
+      "dateFinished": "Jan 14, 2018 7:42:09 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -232,7 +232,7 @@
       "title": "Vertex Influence Over Time (Top 5) Result",
       "text": "z.show(frames)",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:55:30 PM",
+      "dateUpdated": "Jan 14, 2018 7:42:14 PM",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -323,7 +323,7 @@
         "msg": [
           {
             "type": "TABLE",
-            "data": "Name\tYear\tCollaborations\nWei Wang\t1987-01-01\t2\nWei Liu\t1989-01-01\t2\nWei Wang\t1990-01-01\t1\nWei Zhang\t1990-01-01\t3\nWei Liu\t1991-01-01\t2\nWei Wang\t1992-01-01\t1\nWei Zhang\t1993-01-01\t1\nYan Zhang\t1993-01-01\t1\nLei Wang\t1994-01-01\t1\nWei Wang\t1994-01-01\t4\nWei Liu\t1994-01-01\t5\nWei Wang\t1995-01-01\t3\nWei Liu\t1995-01-01\t1\nLei Wang\t1995-01-01\t4\nWei Zhang\t1995-01-01\t5\nYan Zhang\t1995-01-01\t1\nWei Liu\t1996-01-01\t3\nLei Wang\t1996-01-01\t2\nWei Wang\t1996-01-01\t1\nLei Wang\t1997-01-01\t6\nWei Wang\t1997-01-01\t8\nWei Zhang\t1997-01-01\t1\nYan Zhang\t1997-01-01\t4\nLei Wang\t1998-01-01\t11\nWei Wang\t1998-01-01\t6\nYan Zhang\t1998-01-01\t3\nWei Zhang\t1999-01-01\t2\nLei Wang\t1999-01-01\t2\nYan Zhang\t1999-01-01\t5\nWei Liu\t1999-01-01\t1\nWei Wang\t1999-01-01\t13\nWei Liu\t2000-01-01\t7\nWei Wang\t2000-01-01\t9\nLei Wang\t2000-01-01\t4\nWei Zhang\t2000-01-01\t10\nYan Zhang\t2000-01-01\t10\nWei Wang\t2001-01-01\t10\nWei Zhang\t2001-01-01\t7\nWei Liu\t2001-01-01\t3\nLei Wang\t2001-01-01\t6\nYan Zhang\t2001-01-01\t18\nWei Wang\t2002-01-01\t23\nLei Wang\t2002-01-01\t1\nWei Zhang\t2002-01-01\t11\nWei Liu\t2002-01-01\t4\nYan Zhang\t2002-01-01\t22\nLei Wang\t2003-01-01\t18\nWei Wang\t2003-01-01\t30\nWei Zhang\t2003-01-01\t42\nYan Zhang\t2003-01-01\t21\nWei Liu\t2003-01-01\t21\nWei Wang\t2004-01-01\t62\nWei Zhang\t2004-01-01\t43\nYan Zhang\t2004-01-01\t41\nLei Wang\t2004-01-01\t57\nWei Liu\t2004-01-01\t61\nWei Wang\t2005-01-01\t72\nLei Wang\t2005-01-01\t42\nWei Zhang\t2005-01-01\t78\nWei Liu\t2005-01-01\t75\nYan Zhang\t2005-01-01\t54\nWei Liu\t2006-01-01\t91\nWei Zhang\t2006-01-01\t88\nWei Wang\t2006-01-01\t88\nLei Wang\t2006-01-01\t59\nYan Zhang\t2006-01-01\t88\nWei Zhang\t2007-01-01\t69\nYan Zhang\t2007-01-01\t118\nWei Liu\t2007-01-01\t146\nLei Wang\t2007-01-01\t96\nWei Wang\t2007-01-01\t97\nWei Liu\t2008-01-01\t167\nLei Wang\t2008-01-01\t131\nWei Wang\t2008-01-01\t112\nYan Zhang\t2008-01-01\t119\nWei Zhang\t2008-01-01\t73\nWei Liu\t2009-01-01\t157\nLei Wang\t2009-01-01\t146\nWei Zhang\t2009-01-01\t100\nWei Wang\t2009-01-01\t197\nYan Zhang\t2009-01-01\t200\nWei Zhang\t2010-01-01\t153\nYan Zhang\t2010-01-01\t228\nWei Liu\t2010-01-01\t245\nWei Wang\t2010-01-01\t204\nLei Wang\t2010-01-01\t184\nWei Liu\t2011-01-01\t199\nWei Wang\t2011-01-01\t253\nWei Zhang\t2011-01-01\t178\nLei Wang\t2011-01-01\t191\nYan Zhang\t2011-01-01\t221\nWei Zhang\t2012-01-01\t188\nLei Wang\t2012-01-01\t238\nYan Zhang\t2012-01-01\t239\nWei Wang\t2012-01-01\t289\nWei Liu\t2012-01-01\t255\nLei Wang\t2013-01-01\t335\nWei Zhang\t2013-01-01\t255\nYan Zhang\t2013-01-01\t273\nWei Wang\t2013-01-01\t412\nWei Liu\t2013-01-01\t264\nWei Zhang\t2014-01-01\t323\nLei Wang\t2014-01-01\t306\nWei Wang\t2014-01-01\t487\nYan Zhang\t2014-01-01\t287\nWei Liu\t2014-01-01\t271\nWei Liu\t2015-01-01\t27\nWei Zhang\t2015-01-01\t22\nLei Wang\t2015-01-01\t22\nWei Wang\t2015-01-01\t45\nYan Zhang\t2015-01-01\t8\n"
+            "data": "Name\tYear\tCollaborations\nWei Wang\t1987-01-01\t2\nWei Liu\t1989-01-01\t2\nWei Wang\t1990-01-01\t1\nWei Zhang\t1990-01-01\t3\nWei Liu\t1991-01-01\t2\nWei Wang\t1992-01-01\t1\nYan Zhang\t1993-01-01\t1\nWei Zhang\t1993-01-01\t1\nWei Wang\t1994-01-01\t4\nWei Liu\t1994-01-01\t5\nLei Wang\t1994-01-01\t1\nLei Wang\t1995-01-01\t4\nWei Liu\t1995-01-01\t1\nYan Zhang\t1995-01-01\t1\nWei Wang\t1995-01-01\t3\nWei Zhang\t1995-01-01\t5\nWei Liu\t1996-01-01\t3\nLei Wang\t1996-01-01\t2\nWei Wang\t1996-01-01\t1\nYan Zhang\t1997-01-01\t4\nLei Wang\t1997-01-01\t6\nWei Zhang\t1997-01-01\t1\nWei Wang\t1997-01-01\t8\nYan Zhang\t1998-01-01\t3\nLei Wang\t1998-01-01\t11\nWei Wang\t1998-01-01\t6\nLei Wang\t1999-01-01\t2\nWei Wang\t1999-01-01\t13\nYan Zhang\t1999-01-01\t5\nWei Zhang\t1999-01-01\t2\nWei Liu\t1999-01-01\t1\nWei Zhang\t2000-01-01\t10\nWei Wang\t2000-01-01\t9\nWei Liu\t2000-01-01\t7\nLei Wang\t2000-01-01\t4\nYan Zhang\t2000-01-01\t10\nWei Zhang\t2001-01-01\t7\nWei Wang\t2001-01-01\t10\nLei Wang\t2001-01-01\t6\nYan Zhang\t2001-01-01\t18\nWei Liu\t2001-01-01\t3\nYan Zhang\t2002-01-01\t22\nWei Liu\t2002-01-01\t4\nWei Wang\t2002-01-01\t23\nLei Wang\t2002-01-01\t1\nWei Zhang\t2002-01-01\t11\nWei Wang\t2003-01-01\t30\nWei Liu\t2003-01-01\t21\nWei Zhang\t2003-01-01\t42\nYan Zhang\t2003-01-01\t21\nLei Wang\t2003-01-01\t18\nLei Wang\t2004-01-01\t57\nWei Wang\t2004-01-01\t62\nWei Liu\t2004-01-01\t61\nYan Zhang\t2004-01-01\t41\nWei Zhang\t2004-01-01\t43\nWei Zhang\t2005-01-01\t78\nLei Wang\t2005-01-01\t42\nWei Liu\t2005-01-01\t75\nWei Wang\t2005-01-01\t72\nYan Zhang\t2005-01-01\t54\nLei Wang\t2006-01-01\t59\nWei Zhang\t2006-01-01\t88\nWei Liu\t2006-01-01\t91\nYan Zhang\t2006-01-01\t88\nWei Wang\t2006-01-01\t88\nWei Wang\t2007-01-01\t97\nYan Zhang\t2007-01-01\t118\nWei Zhang\t2007-01-01\t69\nWei Liu\t2007-01-01\t146\nLei Wang\t2007-01-01\t96\nWei Wang\t2008-01-01\t112\nYan Zhang\t2008-01-01\t119\nLei Wang\t2008-01-01\t131\nWei Liu\t2008-01-01\t167\nWei Zhang\t2008-01-01\t73\nWei Wang\t2009-01-01\t197\nLei Wang\t2009-01-01\t146\nWei Zhang\t2009-01-01\t100\nWei Liu\t2009-01-01\t157\nYan Zhang\t2009-01-01\t200\nWei Wang\t2010-01-01\t204\nLei Wang\t2010-01-01\t184\nWei Zhang\t2010-01-01\t153\nWei Liu\t2010-01-01\t245\nYan Zhang\t2010-01-01\t228\nWei Liu\t2011-01-01\t199\nWei Wang\t2011-01-01\t253\nYan Zhang\t2011-01-01\t221\nLei Wang\t2011-01-01\t191\nWei Zhang\t2011-01-01\t178\nWei Zhang\t2012-01-01\t188\nYan Zhang\t2012-01-01\t239\nWei Liu\t2012-01-01\t255\nWei Wang\t2012-01-01\t289\nLei Wang\t2012-01-01\t238\nYan Zhang\t2013-01-01\t273\nWei Liu\t2013-01-01\t264\nWei Wang\t2013-01-01\t412\nLei Wang\t2013-01-01\t335\nWei Zhang\t2013-01-01\t255\nLei Wang\t2014-01-01\t306\nWei Wang\t2014-01-01\t487\nWei Liu\t2014-01-01\t271\nYan Zhang\t2014-01-01\t287\nWei Zhang\t2014-01-01\t323\nWei Liu\t2015-01-01\t27\nLei Wang\t2015-01-01\t22\nWei Wang\t2015-01-01\t45\nYan Zhang\t2015-01-01\t8\nWei Zhang\t2015-01-01\t22\n"
           }
         ]
       },
@@ -331,8 +331,8 @@
       "jobName": "paragraph_1513810854445_-953861968",
       "id": "20171220-230054_413057587",
       "dateCreated": "Dec 20, 2017 11:00:54 PM",
-      "dateStarted": "Jan 9, 2018 4:55:30 PM",
-      "dateFinished": "Jan 9, 2018 4:57:00 PM",
+      "dateStarted": "Jan 14, 2018 7:42:14 PM",
+      "dateFinished": "Jan 14, 2018 7:43:25 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },

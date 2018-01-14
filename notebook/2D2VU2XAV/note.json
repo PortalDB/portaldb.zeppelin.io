@@ -4,7 +4,7 @@
       "title": "Original VE Graph",
       "text": "import java.sql.Date\nimport java.time.LocalDate\n\nimport edu.drexel.cs.dbgroup.portal._\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport org.apache.spark.graphx._\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.storage.StorageLevel\nimport org.apache.spark.sql.types.{StructField, _}\nimport org.apache.spark.sql.Row\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\n\nProgramContext.setContext(sc)\n\nval vschema \u003d StructType(\n  StructField(\"VID\", LongType, false) ::\n  StructField(\"Start\", DateType, false) ::\n  StructField(\"End\", DateType, false) ::\n  StructField(\"Name\", StringType, false) :: Nil\n)\n\nval eschema \u003d StructType(\n  StructField(\"EID\", LongType, false) ::\n  StructField(\"SrcId\", LongType, false) ::\n  StructField(\"DstId\", LongType, false) ::\n  StructField(\"Start\", DateType, false) ::\n  StructField(\"End\", DateType, false) ::\n  StructField(\"Value\", StringType, false) :: Nil\n)\n\nval verticesToDf \u003d (vertices: RDD[(VertexId, (Interval, String))]) \u003d\u003e sqlContext.createDataFrame(vertices.map{ case (vid, (interval, name)) \u003d\u003e Row(vid, Date.valueOf(interval.start), Date.valueOf(interval.end), name)},vschema)\nval edgesToDf \u003d (edges: RDD[TEdge[String]]) \u003d\u003e sqlContext.createDataFrame(edges.map{edge \u003d\u003e Row(edge.eId, edge.srcId, edge.dstId, Date.valueOf(edge.interval.start), Date.valueOf(edge.interval.end), edge.attr)},eschema)\n\nval users: RDD[(VertexId, (Interval, String))] \u003d sc.parallelize(Array(\n  (1L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Bob\")),\n  (2L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), \"Barbara\")),\n  (3L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2015-01-01\")), \"Donald\")),\n  (4L, (Interval(LocalDate.parse(\"2011-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Debbie\")),\n  (5L, (Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Edward\"))\n))\n\nval friendships: RDD[(TEdge[String])] \u003d sc.parallelize(Array(\n  TEdge[String](1L, 1L, 2L, Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), \"Friend\"),\n  TEdge[String](2L, 2L, 3L, Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), \"Friend\"),\n  TEdge[String](3L, 3L, 4L, Interval(LocalDate.parse(\"2011-01-01\"), LocalDate.parse(\"2012-01-01\")), \"Friend\"),\n  TEdge[String](4L, 4L, 5L, Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Friend\"),\n  TEdge[String](5L, 2L, 5L, Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2013-01-01\")), \"Friend\")\n))\n\nval VEG \u003d VEGraph.fromRDDs(users,friendships, \"Default\", StorageLevel.MEMORY_ONLY_SER)",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:30:34 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:04 PM",
       "config": {
         "tableHide": true,
         "editorSetting": {
@@ -42,7 +42,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal._\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport org.apache.spark.graphx._\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.storage.StorageLevel\nimport org.apache.spark.sql.types.{StructField, _}\nimport org.apache.spark.sql.Row\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\nvschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(VID,LongType,false), StructField(Start,DateType,false), StructField(End,DateType,false), StructField(Name,StringType,false))\neschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(EID,LongType,false), StructField(SrcId,LongType,false), StructField(DstId,LongType,false), StructField(Start,DateType,false), StructField(End,DateType,false), StructField(Value,StringType,false))\nverticesToDf: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d\u003e org.apache.spark.sql.DataFrame \u003d \u003cfunction1\u003e\nedgesToDf: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[String]] \u003d\u003e org.apache.spark.sql.DataFrame \u003d \u003cfunction1\u003e\nusers: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d ParallelCollectionRDD[512] at parallelize at \u003cconsole\u003e:182\nfriendships: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[String]] \u003d ParallelCollectionRDD[513] at parallelize at \u003cconsole\u003e:182\nVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@1332b980\n"
+            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal._\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport org.apache.spark.graphx._\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.storage.StorageLevel\nimport org.apache.spark.sql.types.{StructField, _}\nimport org.apache.spark.sql.Row\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\nvschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(VID,LongType,false), StructField(Start,DateType,false), StructField(End,DateType,false), StructField(Name,StringType,false))\neschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(EID,LongType,false), StructField(SrcId,LongType,false), StructField(DstId,LongType,false), StructField(Start,DateType,false), StructField(End,DateType,false), StructField(Value,StringType,false))\nverticesToDf: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d\u003e org.apache.spark.sql.DataFrame \u003d \u003cfunction1\u003e\nedgesToDf: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[String]] \u003d\u003e org.apache.spark.sql.DataFrame \u003d \u003cfunction1\u003e\nusers: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d ParallelCollectionRDD[30] at parallelize at \u003cconsole\u003e:73\nfriendships: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[String]] \u003d ParallelCollectionRDD[31] at parallelize at \u003cconsole\u003e:73\nVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@12bfbbd6\n"
           }
         ]
       },
@@ -50,8 +50,8 @@
       "jobName": "paragraph_1513807501835_-1424286912",
       "id": "20171111-211640_1358688239",
       "dateCreated": "Dec 20, 2017 10:05:01 PM",
-      "dateStarted": "Jan 9, 2018 4:30:34 PM",
-      "dateFinished": "Jan 9, 2018 4:30:43 PM",
+      "dateStarted": "Jan 14, 2018 7:34:04 PM",
+      "dateFinished": "Jan 14, 2018 7:34:09 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -59,7 +59,7 @@
       "title": "Original Vertices",
       "text": "z.show(verticesToDf(VEG.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:04 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:18 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -96,8 +96,8 @@
       "jobName": "paragraph_1513807530272_1858067252",
       "id": "20171220-220530_1690746743",
       "dateCreated": "Dec 20, 2017 10:05:30 PM",
-      "dateStarted": "Jan 9, 2018 4:31:04 PM",
-      "dateFinished": "Jan 9, 2018 4:31:05 PM",
+      "dateStarted": "Jan 14, 2018 7:34:18 PM",
+      "dateFinished": "Jan 14, 2018 7:34:19 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -105,7 +105,7 @@
       "title": "Original Edges",
       "text": "z.show(edgesToDf(VEG.edges))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:07 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:21 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -142,8 +142,8 @@
       "jobName": "paragraph_1513807790229_-1037970012",
       "id": "20171220-220950_1631523681",
       "dateCreated": "Dec 20, 2017 10:09:50 PM",
-      "dateStarted": "Jan 9, 2018 4:31:07 PM",
-      "dateFinished": "Jan 9, 2018 4:31:07 PM",
+      "dateStarted": "Jan 14, 2018 7:34:21 PM",
+      "dateFinished": "Jan 14, 2018 7:34:22 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -151,7 +151,7 @@
       "title": "Trim a.k.a. Slice",
       "text": "val sliceInterval \u003d Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2012-01-01\"))\nval slicedVEG \u003d VEG.slice(sliceInterval)",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:11 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:25 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -172,7 +172,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "sliceInterval: edu.drexel.cs.dbgroup.portal.Interval \u003d [2010-01-01-2012-01-01)\nslicedVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@4fbec90\n"
+            "data": "sliceInterval: edu.drexel.cs.dbgroup.portal.Interval \u003d [2010-01-01-2012-01-01)\nslicedVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@39104fc0\n"
           }
         ]
       },
@@ -180,8 +180,8 @@
       "jobName": "paragraph_1513807882985_1272986768",
       "id": "20171220-221122_75853829",
       "dateCreated": "Dec 20, 2017 10:11:22 PM",
-      "dateStarted": "Jan 9, 2018 4:31:11 PM",
-      "dateFinished": "Jan 9, 2018 4:31:12 PM",
+      "dateStarted": "Jan 14, 2018 7:34:25 PM",
+      "dateFinished": "Jan 14, 2018 7:34:26 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -189,7 +189,7 @@
       "title": "Sliced Vertices",
       "text": "z.show(verticesToDf(slicedVEG.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:13 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:29 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -226,8 +226,8 @@
       "jobName": "paragraph_1513807984056_1860403105",
       "id": "20171220-221304_636293897",
       "dateCreated": "Dec 20, 2017 10:13:04 PM",
-      "dateStarted": "Jan 9, 2018 4:31:13 PM",
-      "dateFinished": "Jan 9, 2018 4:31:14 PM",
+      "dateStarted": "Jan 14, 2018 7:34:29 PM",
+      "dateFinished": "Jan 14, 2018 7:34:29 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -235,7 +235,7 @@
       "title": "Sliced Edges",
       "text": "z.show(edgesToDf(slicedVEG.edges))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:15 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:31 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -272,8 +272,8 @@
       "jobName": "paragraph_1513808081684_634747995",
       "id": "20171220-221441_265452002",
       "dateCreated": "Dec 20, 2017 10:14:41 PM",
-      "dateStarted": "Jan 9, 2018 4:31:15 PM",
-      "dateFinished": "Jan 9, 2018 4:31:15 PM",
+      "dateStarted": "Jan 14, 2018 7:34:31 PM",
+      "dateFinished": "Jan 14, 2018 7:34:31 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -281,7 +281,7 @@
       "title": "Vertex and Edge Map",
       "text": "val vmapped \u003d VEG.vmap((vid, interval, name) \u003d\u003e s\"${name} the friendly node\", \"DefaultName\")\nval emapped \u003d vmapped.emap(tedge \u003d\u003e s\"Best${tedge.attr}\")",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:19 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:34 PM",
       "config": {
         "tableHide": true,
         "editorSetting": {
@@ -311,7 +311,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "vmapped: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@144931b2\nemapped: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@58376bcd\n"
+            "data": "vmapped: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@2be0fcdd\nemapped: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@3c528102\n"
           }
         ]
       },
@@ -319,8 +319,8 @@
       "jobName": "paragraph_1513807501846_-1416207185",
       "id": "20171115-191831_661815576",
       "dateCreated": "Dec 20, 2017 10:05:01 PM",
-      "dateStarted": "Jan 9, 2018 4:31:19 PM",
-      "dateFinished": "Jan 9, 2018 4:31:20 PM",
+      "dateStarted": "Jan 14, 2018 7:34:34 PM",
+      "dateFinished": "Jan 14, 2018 7:34:35 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -328,7 +328,7 @@
       "title": "Mapped Vertices",
       "text": "z.show(verticesToDf(emapped.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:21 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:37 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -365,8 +365,8 @@
       "jobName": "paragraph_1513808293572_1356324791",
       "id": "20171220-221813_1654358638",
       "dateCreated": "Dec 20, 2017 10:18:13 PM",
-      "dateStarted": "Jan 9, 2018 4:31:21 PM",
-      "dateFinished": "Jan 9, 2018 4:31:21 PM",
+      "dateStarted": "Jan 14, 2018 7:34:37 PM",
+      "dateFinished": "Jan 14, 2018 7:34:37 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -374,7 +374,7 @@
       "title": "Mapped Edges",
       "text": "z.show(edgesToDf(emapped.edges))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:23 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:39 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -411,8 +411,8 @@
       "jobName": "paragraph_1513808355199_1274650754",
       "id": "20171220-221915_2060808411",
       "dateCreated": "Dec 20, 2017 10:19:15 PM",
-      "dateStarted": "Jan 9, 2018 4:31:23 PM",
-      "dateFinished": "Jan 9, 2018 4:31:23 PM",
+      "dateStarted": "Jan 14, 2018 7:34:39 PM",
+      "dateFinished": "Jan 14, 2018 7:34:40 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -420,7 +420,7 @@
       "title": "SubGraph",
       "text": "val vSelectFunction \u003d (id: VertexId, attr: String, interval: Interval) \u003d\u003e attr.startsWith(\"B\")\nval vsubgraph \u003d VEG.vsubgraph(vSelectFunction)\n\nval eSelectFunction \u003d (trip: TEdgeTriplet[String, String]) \u003d\u003e trip.srcId \u003d\u003d 2\nval esubgraph \u003d VEG.esubgraph(eSelectFunction, TripletFields.None)",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:26 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:42 PM",
       "config": {
         "tableHide": true,
         "editorSetting": {
@@ -450,7 +450,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "vSelectFunction: (org.apache.spark.graphx.VertexId, String, edu.drexel.cs.dbgroup.portal.Interval) \u003d\u003e Boolean \u003d \u003cfunction3\u003e\nvsubgraph: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@317fdb99\neSelectFunction: edu.drexel.cs.dbgroup.portal.TEdgeTriplet[String,String] \u003d\u003e Boolean \u003d \u003cfunction1\u003e\nesubgraph: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@667f271e\n"
+            "data": "vSelectFunction: (org.apache.spark.graphx.VertexId, String, edu.drexel.cs.dbgroup.portal.Interval) \u003d\u003e Boolean \u003d \u003cfunction3\u003e\nvsubgraph: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@1df602a2\neSelectFunction: edu.drexel.cs.dbgroup.portal.TEdgeTriplet[String,String] \u003d\u003e Boolean \u003d \u003cfunction1\u003e\nesubgraph: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@1c4c64df\n"
           }
         ]
       },
@@ -458,8 +458,8 @@
       "jobName": "paragraph_1513807501846_-1416207185",
       "id": "20171115-194303_92492943",
       "dateCreated": "Dec 20, 2017 10:05:01 PM",
-      "dateStarted": "Jan 9, 2018 4:31:26 PM",
-      "dateFinished": "Jan 9, 2018 4:31:28 PM",
+      "dateStarted": "Jan 14, 2018 7:34:42 PM",
+      "dateFinished": "Jan 14, 2018 7:34:43 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -467,7 +467,7 @@
       "title": "VSubGraph Vertices",
       "text": "z.show(verticesToDf(vsubgraph.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:30 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:46 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -504,8 +504,8 @@
       "jobName": "paragraph_1513808612101_-1949577321",
       "id": "20171220-222332_751496786",
       "dateCreated": "Dec 20, 2017 10:23:32 PM",
-      "dateStarted": "Jan 9, 2018 4:31:30 PM",
-      "dateFinished": "Jan 9, 2018 4:31:31 PM",
+      "dateStarted": "Jan 14, 2018 7:34:46 PM",
+      "dateFinished": "Jan 14, 2018 7:34:46 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -513,7 +513,7 @@
       "title": "VSubGraph Edges",
       "text": "z.show(edgesToDf(vsubgraph.edges))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:32 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:47 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -550,8 +550,8 @@
       "jobName": "paragraph_1513808701989_814028056",
       "id": "20171220-222501_234251151",
       "dateCreated": "Dec 20, 2017 10:25:01 PM",
-      "dateStarted": "Jan 9, 2018 4:31:32 PM",
-      "dateFinished": "Jan 9, 2018 4:31:32 PM",
+      "dateStarted": "Jan 14, 2018 7:34:47 PM",
+      "dateFinished": "Jan 14, 2018 7:34:48 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -559,7 +559,7 @@
       "title": "ESubGraph Vertices",
       "text": "z.show(verticesToDf(esubgraph.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:34 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:49 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -596,8 +596,8 @@
       "jobName": "paragraph_1513808760822_-1003297530",
       "id": "20171220-222600_1050461599",
       "dateCreated": "Dec 20, 2017 10:26:00 PM",
-      "dateStarted": "Jan 9, 2018 4:31:35 PM",
-      "dateFinished": "Jan 9, 2018 4:31:35 PM",
+      "dateStarted": "Jan 14, 2018 7:34:49 PM",
+      "dateFinished": "Jan 14, 2018 7:34:50 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -605,7 +605,7 @@
       "title": "ESubGraph Edges",
       "text": "z.show(edgesToDf(esubgraph.edges))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:37 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:51 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -642,8 +642,8 @@
       "jobName": "paragraph_1513808818058_1622906517",
       "id": "20171220-222658_56735002",
       "dateCreated": "Dec 20, 2017 10:26:58 PM",
-      "dateStarted": "Jan 9, 2018 4:31:37 PM",
-      "dateFinished": "Jan 9, 2018 4:31:37 PM",
+      "dateStarted": "Jan 14, 2018 7:34:51 PM",
+      "dateFinished": "Jan 14, 2018 7:34:52 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -651,7 +651,7 @@
       "title": "Temporal Node Creation",
       "text": "val resolution5years \u003d Resolution.between(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2015-01-01\"))\nval existsIn5Years \u003d VEG.createTemporalNodes(new TimeSpec(resolution5years), Exists(), Exists(), (name1, name2) \u003d\u003e name1, (type1, type2) \u003d\u003e type1)",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:41 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:55 PM",
       "config": {
         "editorSetting": {
           "language": "scala"
@@ -680,7 +680,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "resolution5years: edu.drexel.cs.dbgroup.portal.Resolution \u003d P5Y\nexistsIn5Years: edu.drexel.cs.dbgroup.portal.TGraphNoSchema[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@2838750e\n"
+            "data": "resolution5years: edu.drexel.cs.dbgroup.portal.Resolution \u003d P5Y\nexistsIn5Years: edu.drexel.cs.dbgroup.portal.TGraphNoSchema[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@4045a14d\n"
           }
         ]
       },
@@ -688,8 +688,8 @@
       "jobName": "paragraph_1513807501847_-1416591934",
       "id": "20171116-045533_777181967",
       "dateCreated": "Dec 20, 2017 10:05:01 PM",
-      "dateStarted": "Jan 9, 2018 4:31:41 PM",
-      "dateFinished": "Jan 9, 2018 4:31:42 PM",
+      "dateStarted": "Jan 14, 2018 7:34:55 PM",
+      "dateFinished": "Jan 14, 2018 7:34:56 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -697,7 +697,7 @@
       "title": "Temporally Aggregated Vertices",
       "text": "z.show(verticesToDf(existsIn5Years.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:43 PM",
+      "dateUpdated": "Jan 14, 2018 7:34:57 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -734,8 +734,8 @@
       "jobName": "paragraph_1513809116711_1242018785",
       "id": "20171220-223156_292456304",
       "dateCreated": "Dec 20, 2017 10:31:56 PM",
-      "dateStarted": "Jan 9, 2018 4:31:43 PM",
-      "dateFinished": "Jan 9, 2018 4:31:43 PM",
+      "dateStarted": "Jan 14, 2018 7:34:58 PM",
+      "dateFinished": "Jan 14, 2018 7:34:58 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -743,7 +743,7 @@
       "title": "Temporally Aggregated Edges",
       "text": "z.show(edgesToDf(existsIn5Years.edges))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:45 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:00 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -780,8 +780,8 @@
       "jobName": "paragraph_1513809178860_511288679",
       "id": "20171220-223258_369650059",
       "dateCreated": "Dec 20, 2017 10:32:58 PM",
-      "dateStarted": "Jan 9, 2018 4:31:45 PM",
-      "dateFinished": "Jan 9, 2018 4:31:45 PM",
+      "dateStarted": "Jan 14, 2018 7:35:00 PM",
+      "dateFinished": "Jan 14, 2018 7:35:00 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -789,7 +789,7 @@
       "title": "Structural Node Creation",
       "text": "val vertexAggregationFunction \u003d (name1: String, name2: String) \u003d\u003e name1\nval vertexGroupByFunction \u003d (vid: VertexId, name: String) \u003d\u003e name.head.toString.hashCode.toLong\nval groupByFirstLetter \u003d VEG.createAttributeNodes(vertexAggregationFunction)(vertexGroupByFunction)",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:47 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:03 PM",
       "config": {
         "editorSetting": {
           "language": "scala"
@@ -819,7 +819,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "vertexAggregationFunction: (String, String) \u003d\u003e String \u003d \u003cfunction2\u003e\nvertexGroupByFunction: (org.apache.spark.graphx.VertexId, String) \u003d\u003e Long \u003d \u003cfunction2\u003e\ngroupByFirstLetter: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@43090bc8\n"
+            "data": "vertexAggregationFunction: (String, String) \u003d\u003e String \u003d \u003cfunction2\u003e\nvertexGroupByFunction: (org.apache.spark.graphx.VertexId, String) \u003d\u003e Long \u003d \u003cfunction2\u003e\ngroupByFirstLetter: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@68e92e15\n"
           }
         ]
       },
@@ -827,8 +827,8 @@
       "jobName": "paragraph_1513807501847_-1416591934",
       "id": "20171220-184638_1700839453",
       "dateCreated": "Dec 20, 2017 10:05:01 PM",
-      "dateStarted": "Jan 9, 2018 4:31:47 PM",
-      "dateFinished": "Jan 9, 2018 4:31:48 PM",
+      "dateStarted": "Jan 14, 2018 7:35:03 PM",
+      "dateFinished": "Jan 14, 2018 7:35:04 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -836,7 +836,7 @@
       "title": "Structurally Aggregated Vertices",
       "text": "z.show(verticesToDf(groupByFirstLetter.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:49 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:05 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -873,8 +873,8 @@
       "jobName": "paragraph_1513809264448_963271234",
       "id": "20171220-223424_524949693",
       "dateCreated": "Dec 20, 2017 10:34:24 PM",
-      "dateStarted": "Jan 9, 2018 4:31:49 PM",
-      "dateFinished": "Jan 9, 2018 4:31:50 PM",
+      "dateStarted": "Jan 14, 2018 7:35:05 PM",
+      "dateFinished": "Jan 14, 2018 7:35:05 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -882,7 +882,7 @@
       "title": "Structurally Aggregated Edges",
       "text": "z.show(edgesToDf(groupByFirstLetter.edges))",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:31:51 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:07 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -919,8 +919,8 @@
       "jobName": "paragraph_1513809487121_1734478241",
       "id": "20171220-223807_1421484387",
       "dateCreated": "Dec 20, 2017 10:38:07 PM",
-      "dateStarted": "Jan 9, 2018 4:31:51 PM",
-      "dateFinished": "Jan 9, 2018 4:31:51 PM",
+      "dateStarted": "Jan 14, 2018 7:35:08 PM",
+      "dateFinished": "Jan 14, 2018 7:35:08 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -928,7 +928,7 @@
       "title": "Union, Intersection, and Difference",
       "text": "val users1: RDD[(VertexId, (Interval, String))] \u003d sc.parallelize(Array(\n  (1L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Bob\")),\n  (2L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), \"Barbara\")),\n  (3L, (Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2015-01-01\")), \"Clyde\"))\n))\n\nval friendships1: RDD[(TEdge[String])] \u003d sc.parallelize(Array(\n  TEdge[String](1L, 1L, 2L, Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), \"Friend\"),\n  TEdge[String](2L, 2L, 3L, Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2013-01-01\")), \"Friend\")\n))\n\nval VEG1 \u003d VEGraph.fromRDDs(users1,friendships1, \"Default\", StorageLevel.MEMORY_ONLY_SER)\n\nval users2: RDD[(VertexId, (Interval, String))] \u003d sc.parallelize(Array(\n  (1L, (Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2016-01-01\")), \"Bob\")),\n  (2L, (Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Barbara\")),\n  (4L, (Interval(LocalDate.parse(\"2011-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Debbie\")),\n  (5L, (Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Edward\"))\n))\n\nval friendships2: RDD[(TEdge[String])] \u003d sc.parallelize(Array(\n  TEdge[String](1L, 1L, 2L, Interval(LocalDate.parse(\"2010-01-01\"), LocalDate.parse(\"2016-01-01\")), \"Friend\"),\n  TEdge[String](4L, 4L, 5L, Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2014-01-01\")), \"Friend\"),\n  TEdge[String](5L, 2L, 5L, Interval(LocalDate.parse(\"2012-01-01\"), LocalDate.parse(\"2013-01-01\")), \"Friend\")\n))\n\nval VEG2 \u003d VEGraph.fromRDDs(users2,friendships2, \"Default\", StorageLevel.MEMORY_ONLY_SER)\n\nval unionVEG \u003d VEG1.union(VEG2, (name1, name2) \u003d\u003e name1, (type1, type2) \u003d\u003e type1)\n\nval intersectionVEG \u003d VEG1.intersection(VEG2, (name1, name2) \u003d\u003e name1, (type1, type2) \u003d\u003e type1)\n\nval differenceVEG \u003d VEG1.difference(VEG2)",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:16:30 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:11 PM",
       "config": {
         "editorSetting": {
           "language": "scala"
@@ -958,7 +958,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "users1: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d ParallelCollectionRDD[238] at parallelize at \u003cconsole\u003e:98\nfriendships1: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[String]] \u003d ParallelCollectionRDD[239] at parallelize at \u003cconsole\u003e:99\nVEG1: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@50a15b57\nusers2: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d ParallelCollectionRDD[240] at parallelize at \u003cconsole\u003e:99\nfriendships2: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[String]] \u003d ParallelCollectionRDD[241] at parallelize at \u003cconsole\u003e:99\nVEG2: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@1b1e32c9\nunionVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@115f0dfc\nintersectionVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@535e5885\ndifferenceVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@4080b2d0\n"
+            "data": "users1: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d ParallelCollectionRDD[230] at parallelize at \u003cconsole\u003e:72\nfriendships1: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[String]] \u003d ParallelCollectionRDD[231] at parallelize at \u003cconsole\u003e:73\nVEG1: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@328ae9db\nusers2: org.apache.spark.rdd.RDD[(org.apache.spark.graphx.VertexId, (edu.drexel.cs.dbgroup.portal.Interval, String))] \u003d ParallelCollectionRDD[232] at parallelize at \u003cconsole\u003e:73\nfriendships2: org.apache.spark.rdd.RDD[edu.drexel.cs.dbgroup.portal.TEdge[String]] \u003d ParallelCollectionRDD[233] at parallelize at \u003cconsole\u003e:73\nVEG2: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@49ddd61f\nunionVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@790490ff\nintersectionVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@62f8ebaa\ndifferenceVEG: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,String] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@35216a12\n"
           }
         ]
       },
@@ -966,8 +966,8 @@
       "jobName": "paragraph_1513807501848_-1418515678",
       "id": "20171115-184512_1126275549",
       "dateCreated": "Dec 20, 2017 10:05:01 PM",
-      "dateStarted": "Jan 2, 2018 7:16:31 PM",
-      "dateFinished": "Jan 2, 2018 7:16:34 PM",
+      "dateStarted": "Jan 14, 2018 7:35:11 PM",
+      "dateFinished": "Jan 14, 2018 7:35:15 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -975,7 +975,7 @@
       "title": "Graph 1 Vertices",
       "text": "z.show(verticesToDf(VEG1.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:16:36 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:19 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -1012,8 +1012,8 @@
       "jobName": "paragraph_1513807501848_-1418515678",
       "id": "20171220-184254_1464494212",
       "dateCreated": "Dec 20, 2017 10:05:01 PM",
-      "dateStarted": "Jan 2, 2018 7:16:36 PM",
-      "dateFinished": "Jan 2, 2018 7:16:37 PM",
+      "dateStarted": "Jan 14, 2018 7:35:19 PM",
+      "dateFinished": "Jan 14, 2018 7:35:19 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -1021,7 +1021,7 @@
       "title": "Graph 2 Vertices",
       "text": "z.show(verticesToDf(VEG2.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:16:39 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:20 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -1058,8 +1058,8 @@
       "jobName": "paragraph_1513809710631_-1288202708",
       "id": "20171220-224150_1838083710",
       "dateCreated": "Dec 20, 2017 10:41:50 PM",
-      "dateStarted": "Jan 2, 2018 7:16:39 PM",
-      "dateFinished": "Jan 2, 2018 7:16:39 PM",
+      "dateStarted": "Jan 14, 2018 7:35:20 PM",
+      "dateFinished": "Jan 14, 2018 7:35:21 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -1067,7 +1067,7 @@
       "title": "Graph 1 Edges",
       "text": "z.show(edgesToDf(VEG1.edges))",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:16:42 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:24 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -1104,8 +1104,8 @@
       "jobName": "paragraph_1513809735026_-1874914132",
       "id": "20171220-224215_441358452",
       "dateCreated": "Dec 20, 2017 10:42:15 PM",
-      "dateStarted": "Jan 2, 2018 7:16:42 PM",
-      "dateFinished": "Jan 2, 2018 7:16:42 PM",
+      "dateStarted": "Jan 14, 2018 7:35:24 PM",
+      "dateFinished": "Jan 14, 2018 7:35:24 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -1113,7 +1113,7 @@
       "title": "Graph 2 Edges",
       "text": "z.show(edgesToDf(VEG2.edges))",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:16:44 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:26 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -1150,8 +1150,8 @@
       "jobName": "paragraph_1513809759714_1597490664",
       "id": "20171220-224239_1145238324",
       "dateCreated": "Dec 20, 2017 10:42:39 PM",
-      "dateStarted": "Jan 2, 2018 7:16:44 PM",
-      "dateFinished": "Jan 2, 2018 7:16:44 PM",
+      "dateStarted": "Jan 14, 2018 7:35:26 PM",
+      "dateFinished": "Jan 14, 2018 7:35:26 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -1159,7 +1159,7 @@
       "title": "Union Vertices",
       "text": "z.show(verticesToDf(unionVEG.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:16:47 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:30 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -1196,8 +1196,8 @@
       "jobName": "paragraph_1513809838353_1961938172",
       "id": "20171220-224358_404004623",
       "dateCreated": "Dec 20, 2017 10:43:58 PM",
-      "dateStarted": "Jan 2, 2018 7:16:48 PM",
-      "dateFinished": "Jan 2, 2018 7:16:48 PM",
+      "dateStarted": "Jan 14, 2018 7:35:30 PM",
+      "dateFinished": "Jan 14, 2018 7:35:30 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -1205,7 +1205,7 @@
       "title": "Union Edges",
       "text": "z.show(edgesToDf(unionVEG.edges))",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:16:50 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:32 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -1242,8 +1242,8 @@
       "jobName": "paragraph_1513809880936_-1549234317",
       "id": "20171220-224440_950770043",
       "dateCreated": "Dec 20, 2017 10:44:40 PM",
-      "dateStarted": "Jan 2, 2018 7:16:50 PM",
-      "dateFinished": "Jan 2, 2018 7:16:51 PM",
+      "dateStarted": "Jan 14, 2018 7:35:32 PM",
+      "dateFinished": "Jan 14, 2018 7:35:32 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -1251,7 +1251,7 @@
       "title": "Intersection Vertices",
       "text": "z.show(verticesToDf(intersectionVEG.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:16:53 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:36 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -1288,8 +1288,8 @@
       "jobName": "paragraph_1513809922256_112758338",
       "id": "20171220-224522_1206324797",
       "dateCreated": "Dec 20, 2017 10:45:22 PM",
-      "dateStarted": "Jan 2, 2018 7:16:53 PM",
-      "dateFinished": "Jan 2, 2018 7:16:53 PM",
+      "dateStarted": "Jan 14, 2018 7:35:36 PM",
+      "dateFinished": "Jan 14, 2018 7:35:36 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -1297,7 +1297,7 @@
       "title": "Intersection Edges",
       "text": "z.show(edgesToDf(intersectionVEG.edges))",
       "user": "anonymous",
-      "dateUpdated": "Dec 20, 2017 10:46:16 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:38 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -1334,8 +1334,8 @@
       "jobName": "paragraph_1513809952860_-451622326",
       "id": "20171220-224552_2125339693",
       "dateCreated": "Dec 20, 2017 10:45:52 PM",
-      "dateStarted": "Dec 20, 2017 10:46:16 PM",
-      "dateFinished": "Dec 20, 2017 10:46:16 PM",
+      "dateStarted": "Jan 14, 2018 7:35:38 PM",
+      "dateFinished": "Jan 14, 2018 7:35:38 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -1343,7 +1343,7 @@
       "title": "Difference Vertices",
       "text": "z.show(verticesToDf(differenceVEG.vertices))",
       "user": "anonymous",
-      "dateUpdated": "Dec 20, 2017 10:46:47 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:40 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -1380,8 +1380,8 @@
       "jobName": "paragraph_1513809985410_-482555480",
       "id": "20171220-224625_1625706729",
       "dateCreated": "Dec 20, 2017 10:46:25 PM",
-      "dateStarted": "Dec 20, 2017 10:46:47 PM",
-      "dateFinished": "Dec 20, 2017 10:46:47 PM",
+      "dateStarted": "Jan 14, 2018 7:35:40 PM",
+      "dateFinished": "Jan 14, 2018 7:35:40 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -1389,7 +1389,7 @@
       "title": "Difference Edges",
       "text": "z.show(edgesToDf(differenceVEG.edges))",
       "user": "anonymous",
-      "dateUpdated": "Jan 2, 2018 7:16:55 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:42 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -1426,8 +1426,8 @@
       "jobName": "paragraph_1513810013183_-1422835819",
       "id": "20171220-224653_928240051",
       "dateCreated": "Dec 20, 2017 10:46:53 PM",
-      "dateStarted": "Jan 2, 2018 7:16:56 PM",
-      "dateFinished": "Jan 2, 2018 7:16:56 PM",
+      "dateStarted": "Jan 14, 2018 7:35:42 PM",
+      "dateFinished": "Jan 14, 2018 7:35:42 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },

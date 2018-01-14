@@ -40,7 +40,7 @@
       "title": "Node Data",
       "text": "z.show(sqlContext.read.parquet(\"file:///zeppelin/dblp/nodes.parquet\").limit(100))",
       "user": "anonymous",
-      "dateUpdated": "Jan 12, 2018 12:13:33 AM",
+      "dateUpdated": "Jan 14, 2018 7:35:53 PM",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -80,8 +80,8 @@
       "jobName": "paragraph_1511312792132_-396739001",
       "id": "20171122-010632_1083527536",
       "dateCreated": "Nov 22, 2017 1:06:32 AM",
-      "dateStarted": "Nov 22, 2017 4:19:14 PM",
-      "dateFinished": "Nov 22, 2017 4:19:16 PM",
+      "dateStarted": "Jan 14, 2018 7:35:53 PM",
+      "dateFinished": "Jan 14, 2018 7:35:54 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -89,7 +89,7 @@
       "title": "Edge Data",
       "text": "z.show(sqlContext.read.parquet(\"file:///zeppelin/dblp/edgeswids.parquet\").limit(100))",
       "user": "anonymous",
-      "dateUpdated": "Jan 12, 2018 12:13:40 AM",
+      "dateUpdated": "Jan 14, 2018 7:35:55 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -119,8 +119,8 @@
       "jobName": "paragraph_1511319414519_1571671880",
       "id": "20171122-025654_974107187",
       "dateCreated": "Nov 22, 2017 2:56:54 AM",
-      "dateStarted": "Nov 22, 2017 4:19:19 PM",
-      "dateFinished": "Nov 22, 2017 4:19:20 PM",
+      "dateStarted": "Jan 14, 2018 7:35:55 PM",
+      "dateFinished": "Jan 14, 2018 7:35:56 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -128,7 +128,7 @@
       "title": "Degree Distribution Code",
       "text": "import java.sql.Date\nimport java.time.LocalDate\n\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Exists, Interval, Resolution, TimeSpec}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.{DataFrame, Row}\nimport org.apache.spark.sql.types._\n\nProgramContext.setContext(sc)\n\nval dblp \u003d GraphLoader.buildVE(\"file:///zeppelin/dblp\",1,1,Interval(LocalDate.parse(\"2000-01-01\"), LocalDate.MAX))\n\nval schema \u003d StructType(\n  StructField(\"Degree\", IntegerType, false) ::\n  StructField(\"Count\", IntegerType, false) :: Nil\n)\n\nval degreeDistribution \u003d\n  dblp\n    .createTemporalNodes(\n      TimeSpec(Resolution.between(dblp.span.start, dblp.span.end)),\n      Exists(),\n      Exists(),\n      (v1, _) \u003d\u003e v1,\n      (e1, _) \u003d\u003e e1\n    )\n    .aggregateMessages(\n      triplet \u003d\u003e Iterator((triplet.srcId, 1), (triplet.dstId, 1)),\n      (a: Int,b: Int) \u003d\u003e a + b,\n      0,\n      TripletFields.None\n    )\n   .asInstanceOf[VEGraph[(String, Int), Any]]\n   .vmap({case (vid, intv, (name, degree)) \u003d\u003e (degree, 1)}, (0, 1))\n   .asInstanceOf[VEGraph[(Int, Int),Any]]\n   .createAttributeNodes({case ((degree1, count1), (_, count2)) \u003d\u003e (degree1, count1 + count2) })({case (_, (degree: Int, _)) \u003d\u003e degree})\n   .vertices\n   .map { case (_, (_, (degree: Int, count))) \u003d\u003e Row(degree, count) }\n\nval df: DataFrame \u003d sqlContext.createDataFrame(degreeDistribution, schema)\n\nimport org.apache.spark.sql.functions._\n\nval w \u003d Window.orderBy(col(\"Degree\").desc)\n\nval withRow \u003d df.withColumn(\"rank\", row_number().over(w))\n",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:32:15 PM",
+      "dateUpdated": "Jan 14, 2018 7:35:58 PM",
       "config": {
         "tableHide": true,
         "editorSetting": {
@@ -179,7 +179,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Exists, Interval, Resolution, TimeSpec}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.{DataFrame, Row}\nimport org.apache.spark.sql.types._\ndblp: edu.drexel.cs.dbgroup.portal.representations.VEGraph[Any,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@444308a8\nschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(Degree,IntegerType,false), StructField(Count,IntegerType,false))\ndegreeDistribution: org.apache.spark.rdd.RDD[org.apache.spark.sql.Row] \u003d MapPartitionsRDD[780] at map at \u003cconsole\u003e:214\ndf: org.apache.spark.sql.DataFrame \u003d [Degree: int, Count: int]\nimport org.apache.spark.sql.functions._\nw: org.apache.spark.sql.expressions.WindowSpec \u003d org.apache.spark.sql.expressions.WindowSpec@4b98ffc1\nwithRow: org.apache.spark.sql.DataFrame \u003d [Degree: int, Count: int ... 1 more field]\n"
+            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Exists, Interval, Resolution, TimeSpec}\nimport org.apache.spark.graphx.TripletFields\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.{DataFrame, Row}\nimport org.apache.spark.sql.types._\ndblp: edu.drexel.cs.dbgroup.portal.representations.VEGraph[Any,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@6a2223f9\nschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(Degree,IntegerType,false), StructField(Count,IntegerType,false))\ndegreeDistribution: org.apache.spark.rdd.RDD[org.apache.spark.sql.Row] \u003d MapPartitionsRDD[533] at map at \u003cconsole\u003e:105\ndf: org.apache.spark.sql.DataFrame \u003d [Degree: int, Count: int]\nimport org.apache.spark.sql.functions._\nw: org.apache.spark.sql.expressions.WindowSpec \u003d org.apache.spark.sql.expressions.WindowSpec@11cc56f0\nwithRow: org.apache.spark.sql.DataFrame \u003d [Degree: int, Count: int ... 1 more field]\n"
           }
         ]
       },
@@ -187,8 +187,8 @@
       "jobName": "paragraph_1511312493675_147663200",
       "id": "20171111-211648_1638258888",
       "dateCreated": "Nov 22, 2017 1:01:33 AM",
-      "dateStarted": "Jan 9, 2018 4:32:15 PM",
-      "dateFinished": "Jan 9, 2018 4:34:42 PM",
+      "dateStarted": "Jan 14, 2018 7:35:58 PM",
+      "dateFinished": "Jan 14, 2018 7:38:15 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -196,7 +196,7 @@
       "title": "Degree Distribution Result",
       "text": "z.show(withRow)",
       "user": "anonymous",
-      "dateUpdated": "Jan 9, 2018 4:35:33 PM",
+      "dateUpdated": "Jan 14, 2018 7:38:37 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -205,7 +205,7 @@
             "graph": {
               "mode": "lineChart",
               "height": 512.0,
-              "optionOpen": true
+              "optionOpen": false
             },
             "helium": {}
           }
@@ -235,8 +235,8 @@
       "jobName": "paragraph_1513810392874_-1512960128",
       "id": "20171220-225312_1718730286",
       "dateCreated": "Dec 20, 2017 10:53:12 PM",
-      "dateStarted": "Jan 9, 2018 4:35:33 PM",
-      "dateFinished": "Jan 9, 2018 4:35:46 PM",
+      "dateStarted": "Jan 14, 2018 7:38:20 PM",
+      "dateFinished": "Jan 14, 2018 7:38:32 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },

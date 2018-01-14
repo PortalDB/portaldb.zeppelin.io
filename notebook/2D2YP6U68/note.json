@@ -41,7 +41,7 @@
       "title": "Step 1: calculate the degree of each node at all points in time",
       "text": "import java.sql.Date\nimport java.time.{LocalDate, Period}\nimport java.time.temporal.ChronoUnit\n\nimport edu.drexel.cs.dbgroup.portal._\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport org.apache.log4j.{Level, Logger}\nimport org.apache.spark.graphx.{TripletFields, VertexId}\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.types.{StructField, _}\nimport org.apache.spark.sql.{Row, SQLContext}\nimport org.apache.spark.{SparkConf, SparkContext}\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\n\nProgramContext.setContext(sc)\n\nval schema \u003d StructType(\n  StructField(\"Start\", DateType, false) ::\n  StructField(\"End\", DateType, false) ::\n  StructField(\"GraphCentrality\", DecimalType(DecimalType.MAX_PRECISION, DecimalType.MAX_SCALE), false) :: Nil\n)\n\nval dblp: VEGraph[String, Any] \u003d GraphLoader\n  .buildVE(\"file:///zeppelin/dblp\", 1, 1, Interval(LocalDate.MIN, LocalDate.parse(\"1970-01-01\")))\n  .asInstanceOf[VEGraph[String,Any]]\n\n// calculate the degree of each vertex at every point in time\nval degrees: VEGraph[Int, Any] \u003d\n  dblp\n    .aggregateMessages(\n      triplet \u003d\u003e Iterator((triplet.srcId, 1), (triplet.dstId, 1)),\n      (a: Int,b: Int) \u003d\u003e a + b,\n      0,\n      TripletFields.None\n    )\n    .vmap((_,_,attr) \u003d\u003e attr._2, 0)",
       "user": "anonymous",
-      "dateUpdated": "Jan 10, 2018 12:48:26 AM",
+      "dateUpdated": "Jan 14, 2018 7:43:41 PM",
       "config": {
         "tableHide": true,
         "editorSetting": {
@@ -80,7 +80,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "import java.sql.Date\nimport java.time.{LocalDate, Period}\nimport java.time.temporal.ChronoUnit\nimport edu.drexel.cs.dbgroup.portal._\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport org.apache.log4j.{Level, Logger}\nimport org.apache.spark.graphx.{TripletFields, VertexId}\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.types.{StructField, _}\nimport org.apache.spark.sql.{Row, SQLContext}\nimport org.apache.spark.{SparkConf, SparkContext}\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\nschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(Start,DateType,false), StructField(End,DateType,false), StructField(GraphCentrality,DecimalType(38,38),false))\ndblp: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@37e2d3f3\ndegrees: edu.drexel.cs.dbgroup.portal.representations.VEGraph[Int,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@4fa0df14\n"
+            "data": "import java.sql.Date\nimport java.time.{LocalDate, Period}\nimport java.time.temporal.ChronoUnit\nimport edu.drexel.cs.dbgroup.portal._\nimport edu.drexel.cs.dbgroup.portal.representations.VEGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport org.apache.log4j.{Level, Logger}\nimport org.apache.spark.graphx.{TripletFields, VertexId}\nimport org.apache.spark.rdd.RDD\nimport org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.types.{StructField, _}\nimport org.apache.spark.sql.{Row, SQLContext}\nimport org.apache.spark.{SparkConf, SparkContext}\nimport edu.drexel.cs.dbgroup.portal.ProgramContext\nschema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(Start,DateType,false), StructField(End,DateType,false), StructField(GraphCentrality,DecimalType(38,38),false))\ndblp: edu.drexel.cs.dbgroup.portal.representations.VEGraph[String,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@2d756c32\ndegrees: edu.drexel.cs.dbgroup.portal.representations.VEGraph[Int,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@3a96ac40\n"
           }
         ]
       },
@@ -88,8 +88,8 @@
       "jobName": "paragraph_1513711116980_-997444906",
       "id": "20171111-211648_1638258888",
       "dateCreated": "Dec 19, 2017 7:18:36 PM",
-      "dateStarted": "Jan 10, 2018 12:48:26 AM",
-      "dateFinished": "Jan 10, 2018 12:48:31 AM",
+      "dateStarted": "Jan 14, 2018 7:43:41 PM",
+      "dateFinished": "Jan 14, 2018 7:43:45 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -97,7 +97,7 @@
       "title": "Step 2: initialize the resulting graph to have 2 extra vertex vales, one to hold the maximum observed degree, and another to hold the total count of vertices",
       "text": "val initializeMaxAndCount: VEGraph[(Int,Int,Int), Any] \u003d\n      degrees.vmap((_, _, degree) \u003d\u003e (degree, degree, 1), (0,0,1))",
       "user": "anonymous",
-      "dateUpdated": "Jan 10, 2018 12:52:23 AM",
+      "dateUpdated": "Jan 14, 2018 7:43:49 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -119,7 +119,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "initializeMaxAndCount: edu.drexel.cs.dbgroup.portal.representations.VEGraph[(Int, Int, Int),Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@57be937d\n"
+            "data": "initializeMaxAndCount: edu.drexel.cs.dbgroup.portal.representations.VEGraph[(Int, Int, Int),Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@7dac28e\n"
           }
         ]
       },
@@ -127,8 +127,8 @@
       "jobName": "paragraph_1513878844142_-1998996577",
       "id": "20171221-175404_2098675054",
       "dateCreated": "Dec 21, 2017 5:54:04 PM",
-      "dateStarted": "Jan 10, 2018 12:52:23 AM",
-      "dateFinished": "Jan 10, 2018 12:52:24 AM",
+      "dateStarted": "Jan 14, 2018 7:43:50 PM",
+      "dateFinished": "Jan 14, 2018 7:43:50 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -136,7 +136,7 @@
       "title": "Step 3: use structural aggregation to calculate the total degree count, the maximum degree, and the total vertex count, for the whole graph",
       "text": "val vertexAggregationFunction: ((Int, Int, Int), (Int, Int, Int)) \u003d\u003e (Int, Int, Int) \u003d {\n  case ((degree1, max1, count1),(degree2,max2,count2)) \u003d\u003e (\n    degree1 + degree2,\n    Math.max(max1,max2),\n    count1 + count2\n  )\n}\nval vertexGroupByFunction: (VertexId, (Int, Int, Int)) \u003d\u003e VertexId \u003d (_, _) \u003d\u003e 0\n\nval structurallyAggregated: VEGraph[(Int, Int, Int), Any] \u003d initializeMaxAndCount.createAttributeNodes(vertexAggregationFunction)(vertexGroupByFunction)",
       "user": "anonymous",
-      "dateUpdated": "Jan 10, 2018 12:52:25 AM",
+      "dateUpdated": "Jan 14, 2018 7:43:52 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -157,7 +157,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "vertexAggregationFunction: ((Int, Int, Int), (Int, Int, Int)) \u003d\u003e (Int, Int, Int) \u003d \u003cfunction2\u003e\nvertexGroupByFunction: (org.apache.spark.graphx.VertexId, (Int, Int, Int)) \u003d\u003e org.apache.spark.graphx.VertexId \u003d \u003cfunction2\u003e\nstructurallyAggregated: edu.drexel.cs.dbgroup.portal.representations.VEGraph[(Int, Int, Int),Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@69bd11c1\n"
+            "data": "vertexAggregationFunction: ((Int, Int, Int), (Int, Int, Int)) \u003d\u003e (Int, Int, Int) \u003d \u003cfunction2\u003e\nvertexGroupByFunction: (org.apache.spark.graphx.VertexId, (Int, Int, Int)) \u003d\u003e org.apache.spark.graphx.VertexId \u003d \u003cfunction2\u003e\nstructurallyAggregated: edu.drexel.cs.dbgroup.portal.representations.VEGraph[(Int, Int, Int),Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@4781bae0\n"
           }
         ]
       },
@@ -165,8 +165,8 @@
       "jobName": "paragraph_1513880426561_-4586927",
       "id": "20171221-182026_1764955160",
       "dateCreated": "Dec 21, 2017 6:20:26 PM",
-      "dateStarted": "Jan 10, 2018 12:52:25 AM",
-      "dateFinished": "Jan 10, 2018 12:52:27 AM",
+      "dateStarted": "Jan 14, 2018 7:43:52 PM",
+      "dateFinished": "Jan 14, 2018 7:43:54 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -174,7 +174,7 @@
       "title": "Step 4: apply a basic graph centrality formula to the resultant evolving graph",
       "text": "val graphCentralityCalculation: VEGraph[BigDecimal, Any] \u003d structurallyAggregated.vmap(\n  { case (_, _, (totalDegree, maxDegree, vertexCount)) \u003d\u003e BigDecimal(\n    ((vertexCount * maxDegree) - totalDegree).toDouble / ((vertexCount - 1)*(vertexCount - 2)).toDouble)},\n  0)",
       "user": "anonymous",
-      "dateUpdated": "Jan 10, 2018 12:52:29 AM",
+      "dateUpdated": "Jan 14, 2018 7:43:58 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -196,7 +196,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "graphCentralityCalculation: edu.drexel.cs.dbgroup.portal.representations.VEGraph[BigDecimal,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@2a67a3df\n"
+            "data": "graphCentralityCalculation: edu.drexel.cs.dbgroup.portal.representations.VEGraph[BigDecimal,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.VEGraph@62feb0c5\n"
           }
         ]
       },
@@ -204,8 +204,8 @@
       "jobName": "paragraph_1513880564437_-1335069405",
       "id": "20171221-182244_251406601",
       "dateCreated": "Dec 21, 2017 6:22:44 PM",
-      "dateStarted": "Jan 10, 2018 12:52:29 AM",
-      "dateFinished": "Jan 10, 2018 12:52:29 AM",
+      "dateStarted": "Jan 14, 2018 7:43:58 PM",
+      "dateFinished": "Jan 14, 2018 7:43:58 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -213,7 +213,7 @@
       "title": "Perform some basic transformations to show the data visually",
       "text": "val graphCentralityRows \u003d graphCentralityCalculation.vertices\n    .filter{ case (vid, (intv, centrality)) \u003d\u003e centrality \u003e 0.0000000001 }\n    .map{ case (vid, (intv, centrality)) \u003d\u003e Row(Date.valueOf(intv.start), Date.valueOf(intv.end), centrality)}\n\nval graphCentralityDf \u003d sqlContext.createDataFrame(graphCentralityRows, schema)\n\nimport org.apache.spark.sql.functions._\nval w \u003d Window.orderBy(col(\"Start\").asc)\n\nval withRow \u003d graphCentralityDf.withColumn(\"rank\", row_number().over(w))",
       "user": "anonymous",
-      "dateUpdated": "Jan 10, 2018 12:55:54 AM",
+      "dateUpdated": "Jan 14, 2018 7:44:04 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -235,7 +235,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "graphCentralityRows: org.apache.spark.rdd.RDD[org.apache.spark.sql.Row] \u003d MapPartitionsRDD[119] at map at \u003cconsole\u003e:95\ngraphCentralityDf: org.apache.spark.sql.DataFrame \u003d [Start: date, End: date ... 1 more field]\nimport org.apache.spark.sql.functions._\nw: org.apache.spark.sql.expressions.WindowSpec \u003d org.apache.spark.sql.expressions.WindowSpec@31a405ef\nwithRow: org.apache.spark.sql.DataFrame \u003d [Start: date, End: date ... 2 more fields]\n"
+            "data": "graphCentralityRows: org.apache.spark.rdd.RDD[org.apache.spark.sql.Row] \u003d MapPartitionsRDD[679] at map at \u003cconsole\u003e:146\ngraphCentralityDf: org.apache.spark.sql.DataFrame \u003d [Start: date, End: date ... 1 more field]\nimport org.apache.spark.sql.functions._\nw: org.apache.spark.sql.expressions.WindowSpec \u003d org.apache.spark.sql.expressions.WindowSpec@4e788177\nwithRow: org.apache.spark.sql.DataFrame \u003d [Start: date, End: date ... 2 more fields]\n"
           }
         ]
       },
@@ -243,8 +243,8 @@
       "jobName": "paragraph_1513880686460_-440712102",
       "id": "20171221-182446_1953304278",
       "dateCreated": "Dec 21, 2017 6:24:46 PM",
-      "dateStarted": "Jan 10, 2018 12:55:48 AM",
-      "dateFinished": "Jan 10, 2018 12:55:50 AM",
+      "dateStarted": "Jan 14, 2018 7:44:04 PM",
+      "dateFinished": "Jan 14, 2018 7:44:05 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -252,7 +252,7 @@
       "title": "Results",
       "text": "z.show(withRow)",
       "user": "anonymous",
-      "dateUpdated": "Jan 10, 2018 12:56:18 AM",
+      "dateUpdated": "Jan 14, 2018 7:44:09 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -314,8 +314,8 @@
       "jobName": "paragraph_1513880857095_344003799",
       "id": "20171221-182737_82208823",
       "dateCreated": "Dec 21, 2017 6:27:37 PM",
-      "dateStarted": "Jan 10, 2018 12:55:55 AM",
-      "dateFinished": "Jan 10, 2018 12:55:56 AM",
+      "dateStarted": "Jan 14, 2018 7:44:09 PM",
+      "dateFinished": "Jan 14, 2018 7:44:09 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
