@@ -2,9 +2,5 @@ version: '2.1'
 services:
   zeppelin:
     labels:
-      - "project=tgraph"
-    build: ./zeppelin
-  jekyll:
-    labels:
-      - "project=tgraph"
-    build: ./jekyll
+      - "project=PortalDB"
+    build: ./
