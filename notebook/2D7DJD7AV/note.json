@@ -115,9 +115,9 @@
     },
     {
       "title": "Step 3: Calculate the size of the largest component using vertex map and structural aggregation.",
-      "text": "val largestComponentOverTime: VEGraph[VertexId, Any] \u003d connectedComponents\n        .createAttributeNodes({case ((id1, count1), (id2, count2)) \u003d\u003e (id1, count1 + count2)})({case (_,(id, count)) \u003d\u003e id})\n        .vmap({case (vid, intv, (componentId, count)) \u003d\u003e count},1L)\n        .createAttributeNodes((c1, c2) \u003d\u003e math.max(c1,c2))((_,_) \u003d\u003e 1L)\n        \n        \n        \n        ",
+      "text": "val largestComponentOverTime: VEGraph[VertexId, Any] \u003d connectedComponents\n        .createAttributeNodes({case ((id1, count1), (id2, count2)) \u003d\u003e (id1, count1 + count2)})({case (_,(id, count)) \u003d\u003e id})\n        .vmap({case (vid, intv, (componentId, count)) \u003d\u003e count},1L)\n        .createAttributeNodes((c1, c2) \u003d\u003e math.max(c1,c2))((_,_) \u003d\u003e 1L)\n        \n        \n        \n        \n        ",
       "user": "anonymous",
-      "dateUpdated": "Feb 17, 2018 5:14:35 PM",
+      "dateUpdated": "Feb 17, 2018 8:06:50 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -191,10 +191,10 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "title": "Results",
+      "title": "Results - the size of the largest connected component w-r-t the entire graph",
       "text": "z.show(withRow)",
       "user": "anonymous",
-      "dateUpdated": "Feb 17, 2018 5:14:04 PM",
+      "dateUpdated": "Feb 17, 2018 8:07:36 PM",
       "config": {
         "colWidth": 6.0,
         "enabled": true,
@@ -235,7 +235,7 @@
         },
         "editorMode": "ace/mode/scala",
         "title": true,
-        "editorHide": false,
+        "editorHide": true,
         "tableHide": false
       },
       "settings": {

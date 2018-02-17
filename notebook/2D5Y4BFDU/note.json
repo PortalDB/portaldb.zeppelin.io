@@ -1,0 +1,236 @@
+{
+  "paragraphs": [
+    {
+      "text": "z.show(\"\"\"%html\n\u003ch3\u003eIn this use case, we\u0027ll use built-in analytics to run PageRank on DBLP.\u003c/h3\u003e\n    \u003ch4\u003eWe\u0027ll use the top collaborators from the vertex influence use case.\u003c/h4\u003e\n    \u003ch4\u003eWe\u0027ll run the PageRank algorithm for a maximum of 20 iterations.\u003c/h4\u003e\n\u003ch3\u003eThe results will show the authors\u0027 PageRank value evolved over time.\u003c/h3\u003e\n\"\"\")\n\n",
+      "user": "anonymous",
+      "dateUpdated": "Feb 17, 2018 8:11:10 PM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala"
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eIn this use case, we\u0027ll use built-in analytics to run PageRank on DBLP.\u003c/h3\u003e\n    \u003ch4\u003eWe\u0027ll use the top collaborators from the vertex influence use case.\u003c/h4\u003e\n    \u003ch4\u003eWe\u0027ll run the PageRank algorithm for a maximum of 20 iterations.\u003c/h4\u003e\n\u003ch3\u003eThe results will show the authors\u0027 PageRank value evolved over time.\u003c/h3\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518898089286_2146352931",
+      "id": "20180217-151422_2053768986",
+      "dateCreated": "Feb 17, 2018 8:08:09 PM",
+      "dateStarted": "Feb 17, 2018 8:11:05 PM",
+      "dateFinished": "Feb 17, 2018 8:11:06 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "We run the PageRank algorithm first, then take a subgraph of the result.",
+      "text": "import java.sql.Date\nimport java.time.LocalDate\n\nimport edu.drexel.cs.dbgroup.portal.representations.{OneGraphColumn, VEGraph}\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Interval, ProgramContext}\nimport org.apache.spark.sql.Row\nimport org.apache.spark.sql.types._\n\nProgramContext.setContext(sc)\n\nval topAuthorVids \u003d Set(31299L, 25939L, 8676L, 27953L, 7766L)\n\nval dblp: OneGraphColumn[String, Any] \u003d GraphLoader\n        .buildOGC(\"file:///zeppelin/dblp\", 1, 1, Interval(LocalDate.parse(\"1990-01-01\"), LocalDate.parse(\"2000-01-01\")))\n        .asInstanceOf[OneGraphColumn[String,Any]]\n\nval pageRank: VEGraph[(String, Double), Any] \u003d dblp\n        .pageRank(false, 0.001, numIter \u003d 20)\n        .vsubgraph({case (vid, (name, pageRank), intv) \u003d\u003e topAuthorVids.contains(vid)})",
+      "user": "anonymous",
+      "dateUpdated": "Feb 17, 2018 11:15:26 PM",
+      "config": {
+        "tableHide": true,
+        "editorSetting": {
+          "language": "scala"
+        },
+        "colWidth": 6.0,
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal.representations.{OneGraphColumn, VEGraph}\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Interval, ProgramContext}\nimport org.apache.spark.sql.Row\nimport org.apache.spark.sql.types._\ntopAuthorVids: scala.collection.immutable.Set[Long] \u003d Set(7766, 8676, 27953, 25939, 31299)\ndblp: edu.drexel.cs.dbgroup.portal.representations.OneGraphColumn[String,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.OneGraphColumn@764313e2\npageRank: edu.drexel.cs.dbgroup.portal.representations.VEGraph[(String, Double),Any] \u003d edu.drexel.cs.dbgroup.portal.representations.OneGraphColumn@627814c9\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518898089292_2142505442",
+      "id": "20180217-151937_1427472633",
+      "dateCreated": "Feb 17, 2018 8:08:09 PM",
+      "dateStarted": "Feb 17, 2018 11:15:27 PM",
+      "dateFinished": "Feb 17, 2018 11:18:33 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Perform some transformations to show the data visually",
+      "text": "val schema \u003d StructType(\n    StructField(\"Name\", StringType, false) ::\n    StructField(\"Year\", DateType, false) ::\n    StructField(\"PageRank\", DoubleType, false) :: Nil\n)\n\nval pageRankDf \u003d sqlContext.createDataFrame(\n        pageRank.vertices.map({ case (vid, (intv, (name, pagerank))) \u003d\u003e Row(name, Date.valueOf(intv.start), pagerank)}),\n        schema\n)\n\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.expressions.Window\nval w \u003d Window.orderBy(col(\"Year\").asc)\n\nval withRow \u003d pageRankDf.withColumn(\"rank\", row_number().over(w))",
+      "user": "anonymous",
+      "dateUpdated": "Feb 17, 2018 11:19:36 PM",
+      "config": {
+        "tableHide": true,
+        "editorSetting": {
+          "language": "scala"
+        },
+        "colWidth": 6.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": false,
+        "title": true,
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "schema: org.apache.spark.sql.types.StructType \u003d StructType(StructField(Name,StringType,false), StructField(Year,DateType,false), StructField(PageRank,DoubleType,false))\npageRankDf: org.apache.spark.sql.DataFrame \u003d [Name: string, Year: date ... 1 more field]\nimport org.apache.spark.sql.functions._\nimport org.apache.spark.sql.expressions.Window\nw: org.apache.spark.sql.expressions.WindowSpec \u003d org.apache.spark.sql.expressions.WindowSpec@7720bd98\nwithRow: org.apache.spark.sql.DataFrame \u003d [Name: string, Year: date ... 2 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518898089294_2143274940",
+      "id": "20180217-154108_2029872868",
+      "dateCreated": "Feb 17, 2018 8:08:09 PM",
+      "dateStarted": "Feb 17, 2018 11:19:36 PM",
+      "dateFinished": "Feb 17, 2018 11:19:39 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Results",
+      "text": "z.show(withRow)",
+      "user": "anonymous",
+      "dateUpdated": "Feb 17, 2018 11:20:33 PM",
+      "config": {
+        "tableHide": false,
+        "editorSetting": {
+          "language": "scala"
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "title": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "lineChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "lineChart": {
+                  "forceY": true,
+                  "lineWithFocus": false
+                },
+                "multiBarChart": {}
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "Year",
+                  "index": 1.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [
+                {
+                  "name": "Name",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "values": [
+                {
+                  "name": "PageRank",
+                  "index": 2.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "Name\tYear\tPageRank\trank\nWei Zhang\t1990-01-01\t0.9670543985781622\t1\nWei Wang\t1990-01-01\t0.5372328704221287\t2\nWei Liu\t1991-01-01\t0.7024835098273815\t3\nWei Liu\t1992-01-01\t0.6315756355652754\t4\nWei Wang\t1992-01-01\t0.7462288854489301\t5\nWei Zhang\t1993-01-01\t0.9670543985781622\t6\nYan Zhang\t1993-01-01\t0.6362831023299357\t7\nWei Liu\t1994-01-01\t1.5759167773151614\t8\nLei Wang\t1994-01-01\t0.7462288854489301\t9\nWei Wang\t1994-01-01\t1.2336975791315299\t10\nWei Liu\t1995-01-01\t0.9670543985781622\t11\nWei Zhang\t1995-01-01\t0.9890104896843784\t12\nYan Zhang\t1995-01-01\t0.4253167717996564\t13\nLei Wang\t1995-01-01\t1.067963675999674\t14\nWei Wang\t1995-01-01\t0.9424077986376813\t15\nWei Liu\t1996-01-01\t0.8027419219302053\t16\nYan Zhang\t1996-01-01\t0.3244454051369378\t17\nLei Wang\t1996-01-01\t0.9670543985781622\t18\nWei Wang\t1996-01-01\t0.9670543985781622\t19\nWei Zhang\t1997-01-01\t0.9670543985781622\t20\nYan Zhang\t1997-01-01\t0.9396375041115734\t21\nLei Wang\t1997-01-01\t1.30782820630614\t22\nWei Wang\t1997-01-01\t2.0432673266927304\t23\nYan Zhang\t1998-01-01\t1.0350320744507637\t24\nLei Wang\t1998-01-01\t2.238229503910392\t25\nWei Wang\t1998-01-01\t1.720474262461635\t26\nWei Liu\t1999-01-01\t0.3716664807292945\t27\nWei Zhang\t1999-01-01\t0.9670543985781622\t28\nYan Zhang\t1999-01-01\t1.8355580792312356\t29\nLei Wang\t1999-01-01\t0.5850565573671926\t30\nWei Wang\t1999-01-01\t2.5135174052963256\t31\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518898089294_2143274940",
+      "id": "20180217-155825_1147886704",
+      "dateCreated": "Feb 17, 2018 8:08:09 PM",
+      "dateStarted": "Feb 17, 2018 11:19:41 PM",
+      "dateFinished": "Feb 17, 2018 11:19:42 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "Feb 17, 2018 8:08:09 PM",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1518898089294_2143274940",
+      "id": "20180217-160316_896473044",
+      "dateCreated": "Feb 17, 2018 8:08:09 PM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "SampleUseCases/PageRankOverTime",
+  "id": "2D5Y4BFDU",
+  "angularObjects": {
+    "2CYWUJACM:shared_process": [],
+    "2D1EN4QZD:shared_process": [],
+    "2CZD71VF8:shared_process": [],
+    "2CZ37EUFT:shared_process": [],
+    "2CZBJT9XJ:shared_process": [],
+    "2CZ5H6JXQ:shared_process": [],
+    "2D12E1BMZ:shared_process": [],
+    "2CZZQVU59:shared_process": [],
+    "2D168XTGW:shared_process": [],
+    "2CYTH192P:shared_process": [],
+    "2CX3PZJZQ:shared_process": [],
+    "2CZTTJ1FV:shared_process": [],
+    "2CWNYDQ86:shared_process": [],
+    "2CZFHBZDG:shared_process": [],
+    "2CYHP3ZX4:shared_process": [],
+    "2CY96RJ1Y:shared_process": [],
+    "2CXRXM356:shared_process": [],
+    "2CY1N7Q3W:shared_process": [],
+    "2CZXKHW8J:shared_process": [],
+    "2CZE4C357:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}

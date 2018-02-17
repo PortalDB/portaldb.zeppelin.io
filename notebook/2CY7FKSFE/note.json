@@ -3,7 +3,7 @@
     {
       "text": "z.show(\"\"\"%html\n\u003ch3\u003eVertex Influence over time.\u003c/h3\u003e\n    \u003ch4\u003eWe will set up this example by analyzing the top collaborating authors in the DBLP dataset.\u003c/h4\u003e\n    \u003ch4\u003eThis will be the authors with the most edges (collaborations) in the graph, over all time.\u003c/h4\u003e\n\u003ch3\u003eFinally, we will look at the degree of the top 5 authors over the evoltion of the graph.\u003c/h3\u003e\n\"\"\")",
       "user": "anonymous",
-      "dateUpdated": "Feb 17, 2018 3:22:39 PM",
+      "dateUpdated": "Feb 17, 2018 8:05:15 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -12,7 +12,8 @@
           "language": "scala"
         },
         "editorMode": "ace/mode/scala",
-        "editorHide": false
+        "editorHide": false,
+        "tableHide": true
       },
       "settings": {
         "params": {},
@@ -96,7 +97,7 @@
       "title": "Top Collaborators Result",
       "text": "z.show(withRow)",
       "user": "anonymous",
-      "dateUpdated": "Jan 14, 2018 7:39:02 PM",
+      "dateUpdated": "Feb 17, 2018 8:05:49 PM",
       "config": {
         "tableHide": false,
         "editorSetting": {
@@ -111,7 +112,7 @@
           "0": {
             "graph": {
               "mode": "table",
-              "height": 746.0,
+              "height": 762.0,
               "optionOpen": false
             }
           },
