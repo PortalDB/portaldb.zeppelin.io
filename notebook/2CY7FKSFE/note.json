@@ -1,9 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "z.show(\"\"\"%html\n\u003ch3\u003eVertex Influence over time.\u003c/h3\u003e\n    \u003ch5\u003eWe will set up this example by analyzing the top collaborating authors in the DBLP dataset.\u003c/h4\u003e\n    \u003ch5\u003eThis will be the authors with the most edges (collaborations) in the graph, over all time.\u003c/h4\u003e\n\u003ch4\u003eFinally, we will look at the degree of the top 5 authors over the evoltion of the graph.\u003c/h3\u003e\n\"\"\")",
+      "text": "z.show(\"\"\"%html\n\u003ch3\u003eVertex Influence over time.\u003c/h3\u003e\n    \u003ch4\u003eWe will set up this example by analyzing the top collaborating authors in the DBLP dataset.\u003c/h4\u003e\n    \u003ch4\u003eThis will be the authors with the most edges (collaborations) in the graph, over all time.\u003c/h4\u003e\n\u003ch3\u003eFinally, we will look at the degree of the top 5 authors over the evoltion of the graph.\u003c/h3\u003e\n\"\"\")",
       "user": "anonymous",
-      "dateUpdated": "Dec 21, 2017 6:57:05 PM",
+      "dateUpdated": "Feb 17, 2018 3:22:39 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -12,7 +12,7 @@
           "language": "scala"
         },
         "editorMode": "ace/mode/scala",
-        "editorHide": true
+        "editorHide": false
       },
       "settings": {
         "params": {},
@@ -23,7 +23,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "\u003ch3\u003eVertex Influence over time.\u003c/h3\u003e\n    \u003ch5\u003eWe will set up this example by analyzing the top collaborating authors in the DBLP dataset.\u003c/h4\u003e\n    \u003ch5\u003eThis will be the authors with the most edges (collaborations) in the graph, over all time.\u003c/h4\u003e\n\u003ch4\u003eFinally, we will look at the degree of the top 5 authors over the evoltion of the graph.\u003c/h3\u003e\n"
+            "data": "\u003ch3\u003eVertex Influence over time.\u003c/h3\u003e\n    \u003ch4\u003eWe will set up this example by analyzing the top collaborating authors in the DBLP dataset.\u003c/h4\u003e\n    \u003ch4\u003eThis will be the authors with the most edges (collaborations) in the graph, over all time.\u003c/h4\u003e\n\u003ch3\u003eFinally, we will look at the degree of the top 5 authors over the evoltion of the graph.\u003c/h3\u003e\n"
           }
         ]
       },
@@ -31,8 +31,8 @@
       "jobName": "paragraph_1513880736028_-756144903",
       "id": "20171221-182536_887284558",
       "dateCreated": "Dec 21, 2017 6:25:36 PM",
-      "dateStarted": "Dec 21, 2017 6:47:11 PM",
-      "dateFinished": "Dec 21, 2017 6:47:26 PM",
+      "dateStarted": "Feb 17, 2018 3:22:24 PM",
+      "dateFinished": "Feb 17, 2018 3:22:25 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },

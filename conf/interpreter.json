@@ -69,7 +69,7 @@
       "name": "portal",
       "group": "spark",
       "properties": {
-        "spark.executor.memory": "4g",
+        "spark.executor.memory": "12g",
         "args": "",
         "zeppelin.spark.printREPLOutput": "true",
         "spark.cores.max": "",
@@ -80,6 +80,7 @@
         "zeppelin.spark.useHiveContext": "true",
         "zeppelin.pyspark.python": "python",
         "zeppelin.dep.localrepo": "local-repo",
+        "spark.driver.memory": "12g",
         "zeppelin.interpreter.localRepo": "/zeppelin/local-repo/2CX3PZJZQ",
         "zeppelin.R.knitr": "true",
         "zeppelin.interpreter.output.limit": "102400",
@@ -135,7 +136,7 @@
       ],
       "dependencies": [
         {
-          "groupArtifactVersion": "portal_2.11-1.0.jar",
+          "groupArtifactVersion": "portal-assembly-1.0.jar",
           "local": false
         }
       ],
@@ -987,6 +988,28 @@
       "2D168XTGW"
     ],
     "2D2VU2XAV": [
+      "2CX3PZJZQ",
+      "2CZ5H6JXQ",
+      "2CZ37EUFT",
+      "2CZXKHW8J",
+      "2CXRXM356",
+      "2D1EN4QZD",
+      "2D12E1BMZ",
+      "2CY1N7Q3W",
+      "2CZTTJ1FV",
+      "2CYHP3ZX4",
+      "2CYTH192P",
+      "2CZBJT9XJ",
+      "2CZE4C357",
+      "2CWNYDQ86",
+      "2CZZQVU59",
+      "2CZD71VF8",
+      "2CYWUJACM",
+      "2CZFHBZDG",
+      "2CY96RJ1Y",
+      "2D168XTGW"
+    ],
+    "2D7DJD7AV": [
       "2CX3PZJZQ",
       "2CZ5H6JXQ",
       "2CZ37EUFT",

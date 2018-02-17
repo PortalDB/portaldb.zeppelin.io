@@ -1,0 +1,304 @@
+{
+  "paragraphs": [
+    {
+      "text": "z.show(\"\"\"%html\n\u003ch3\u003eIn this use case, we\u0027ll use built-in analytics to run connected components on DBLP.\u003c/h3\u003e\n    \u003ch4\u003eFirst, we\u0027ll calculate the size of DBLP (in terms of vertices) over time.\u003c/h4\u003e\n    \u003ch4\u003eThen, we\u0027ll calculate connected components over time.\u003c/h4\u003e\n\u003ch3\u003eFinally, we will compare the size of the largest connected component to the size of the entire graph.\u003c/h3\u003e\n\"\"\")\n\n",
+      "user": "anonymous",
+      "dateUpdated": "Feb 17, 2018 5:13:26 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "\u003ch3\u003eIn this use case, we\u0027ll use built-in analytics to run connected components on DBLP.\u003c/h3\u003e\n    \u003ch4\u003eFirst, we\u0027ll calculate the size of DBLP (in terms of vertices) over time.\u003c/h4\u003e\n    \u003ch4\u003eThen, we\u0027ll calculate connected components over time.\u003c/h4\u003e\n\u003ch3\u003eFinally, we will compare the size of the largest connected component to the size of the entire graph.\u003c/h3\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518880462115_882370569",
+      "id": "20180217-151422_2053768986",
+      "dateCreated": "Feb 17, 2018 3:14:22 PM",
+      "dateStarted": "Feb 17, 2018 5:13:22 PM",
+      "dateFinished": "Feb 17, 2018 5:13:22 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Step 1: Use structural aggregation to calculate the size of the graph over time.",
+      "text": "import java.sql.Date\nimport java.time.LocalDate\n\nimport edu.drexel.cs.dbgroup.portal.representations.{OneGraphColumn, VEGraph}\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Interval, ProgramContext}\nimport org.apache.spark.graphx.VertexId\nimport org.apache.spark.sql.{Row, SQLContext}\nimport org.apache.spark.sql.types.{DateType, LongType, StructField, StructType}\n\nProgramContext.setContext(sc)\n\nval dblp: OneGraphColumn[String, Any] \u003d GraphLoader\n        .buildOGC(\"file:///zeppelin/dblp\", 1, 1, Interval((LocalDate.MIN), LocalDate.parse(\"2000-01-01\")))\n        .asInstanceOf[OneGraphColumn[String,Any]]\n      \nval graphSizeOverTime: VEGraph[VertexId, Any] \u003d dblp\n        .vmap({case (vid, intv, name) \u003d\u003e 1L}, 0L)\n        .createAttributeNodes((c1: Long, c2: Long) \u003d\u003e c1 + c2)((_,_) \u003d\u003e 1L)",
+      "user": "anonymous",
+      "dateUpdated": "Feb 17, 2018 5:10:08 PM",
+      "config": {
+        "colWidth": 6.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.sql.Date\nimport java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal.representations.{OneGraphColumn, VEGraph}\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\nimport edu.drexel.cs.dbgroup.portal.{Interval, ProgramContext}\nimport org.apache.spark.graphx.VertexId\nimport org.apache.spark.sql.{Row, SQLContext}\nimport org.apache.spark.sql.types.{DateType, LongType, StructField, StructType}\ndblp: edu.drexel.cs.dbgroup.portal.representations.OneGraphColumn[String,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.OneGraphColumn@6939b0f3\ngraphSizeOverTime: edu.drexel.cs.dbgroup.portal.representations.VEGraph[org.apache.spark.graphx.VertexId,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.OneGraphColumn@5dd26b0d\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518880777167_57344689",
+      "id": "20180217-151937_1427472633",
+      "dateCreated": "Feb 17, 2018 3:19:37 PM",
+      "dateStarted": "Feb 17, 2018 5:07:09 PM",
+      "dateFinished": "Feb 17, 2018 5:07:33 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Step 2: Use the built-in connected components analytic to assign a component ID to each vertex.  Additionally, assign an initial count of 1 to each vertex.",
+      "text": "val connectedComponents: OneGraphColumn[(VertexId, Long), Any] \u003d dblp\n        .connectedComponents\n        .vmap({ case (vid, interval, (name, componentId)) \u003d\u003e (componentId, 1L)}, (1L, 1L))",
+      "user": "anonymous",
+      "dateUpdated": "Feb 17, 2018 5:14:26 PM",
+      "config": {
+        "colWidth": 6.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "connectedComponents: edu.drexel.cs.dbgroup.portal.representations.OneGraphColumn[(org.apache.spark.graphx.VertexId, Long),Any] \u003d edu.drexel.cs.dbgroup.portal.representations.OneGraphColumn@131ee453\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518881253742_248425854",
+      "id": "20180217-152733_423549963",
+      "dateCreated": "Feb 17, 2018 3:27:33 PM",
+      "dateStarted": "Feb 17, 2018 5:10:10 PM",
+      "dateFinished": "Feb 17, 2018 5:11:45 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Step 3: Calculate the size of the largest component using vertex map and structural aggregation.",
+      "text": "val largestComponentOverTime: VEGraph[VertexId, Any] \u003d connectedComponents\n        .createAttributeNodes({case ((id1, count1), (id2, count2)) \u003d\u003e (id1, count1 + count2)})({case (_,(id, count)) \u003d\u003e id})\n        .vmap({case (vid, intv, (componentId, count)) \u003d\u003e count},1L)\n        .createAttributeNodes((c1, c2) \u003d\u003e math.max(c1,c2))((_,_) \u003d\u003e 1L)\n        \n        \n        \n        ",
+      "user": "anonymous",
+      "dateUpdated": "Feb 17, 2018 5:14:35 PM",
+      "config": {
+        "colWidth": 6.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "largestComponentOverTime: edu.drexel.cs.dbgroup.portal.representations.VEGraph[org.apache.spark.graphx.VertexId,Any] \u003d edu.drexel.cs.dbgroup.portal.representations.OneGraphColumn@7d2b3344\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518881596809_-1191013371",
+      "id": "20180217-153316_1715798812",
+      "dateCreated": "Feb 17, 2018 3:33:16 PM",
+      "dateStarted": "Feb 17, 2018 5:11:49 PM",
+      "dateFinished": "Feb 17, 2018 5:12:18 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Perform some transformations to show the data visually",
+      "text": "import org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.functions._\n\nval schema1 \u003d StructType(\n  StructField(\"Year\", DateType, false) ::\n  StructField(\"TotalVertices\", LongType, false) :: Nil\n)\n\nval schema2 \u003d StructType(\n  StructField(\"Year\", DateType, false) :: \n  StructField(\"LargestComponent\", LongType, false) :: Nil\n)\n\nval graphSizeDf \u003d sqlContext.createDataFrame(\n  graphSizeOverTime.vertices.map({ case (vid, (intv, cnt)) \u003d\u003e Row(Date.valueOf(intv.start), cnt)}),\n  schema1\n)\n\nval componentSizeDf \u003d sqlContext.createDataFrame(\n  largestComponentOverTime.vertices.map({ case (vid, (intv, cnt)) \u003d\u003e Row(Date.valueOf(intv.start), cnt)}),\n  schema2\n)\n\nval joined \u003d graphSizeDf.join(componentSizeDf, \"Year\").withColumn(\"Ratio\", col(\"LargestComponent\").divide(col(\"TotalVertices\")))\n\nimport org.apache.spark.sql.functions._\nval w \u003d Window.orderBy(col(\"Year\").asc)\n\nval withRow \u003d joined.withColumn(\"rank\", row_number().over(w))",
+      "user": "anonymous",
+      "dateUpdated": "Feb 17, 2018 5:12:21 PM",
+      "config": {
+        "colWidth": 6.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import org.apache.spark.sql.expressions.Window\nimport org.apache.spark.sql.functions._\nschema1: org.apache.spark.sql.types.StructType \u003d StructType(StructField(Year,DateType,false), StructField(TotalVertices,LongType,false))\nschema2: org.apache.spark.sql.types.StructType \u003d StructType(StructField(Year,DateType,false), StructField(LargestComponent,LongType,false))\ngraphSizeDf: org.apache.spark.sql.DataFrame \u003d [Year: date, TotalVertices: bigint]\ncomponentSizeDf: org.apache.spark.sql.DataFrame \u003d [Year: date, LargestComponent: bigint]\njoined: org.apache.spark.sql.DataFrame \u003d [Year: date, TotalVertices: bigint ... 2 more fields]\nimport org.apache.spark.sql.functions._\nw: org.apache.spark.sql.expressions.WindowSpec \u003d org.apache.spark.sql.expressions.WindowSpec@49e9b590\nwithRow: org.apache.spark.sql.DataFrame \u003d [Year: date, TotalVertices: bigint ... 3 more fields]\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518882068713_-2131096141",
+      "id": "20180217-154108_2029872868",
+      "dateCreated": "Feb 17, 2018 3:41:08 PM",
+      "dateStarted": "Feb 17, 2018 5:12:21 PM",
+      "dateFinished": "Feb 17, 2018 5:12:26 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "title": "Results",
+      "text": "z.show(withRow)",
+      "user": "anonymous",
+      "dateUpdated": "Feb 17, 2018 5:14:04 PM",
+      "config": {
+        "colWidth": 6.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "lineChart",
+              "height": 300.0,
+              "optionOpen": false,
+              "setting": {
+                "lineChart": {
+                  "forceY": true,
+                  "lineWithFocus": false
+                }
+              },
+              "commonSetting": {},
+              "keys": [
+                {
+                  "name": "Year",
+                  "index": 0.0,
+                  "aggr": "sum"
+                }
+              ],
+              "groups": [],
+              "values": [
+                {
+                  "name": "Ratio",
+                  "index": 3.0,
+                  "aggr": "sum"
+                }
+              ]
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "title": true,
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "Year\tTotalVertices\tLargestComponent\tRatio\trank\n1936-01-01\t8\t1\t0.125\t1\n1938-01-01\t9\t2\t0.2222222222222222\t2\n1939-01-01\t15\t1\t0.06666666666666667\t3\n1940-01-01\t9\t3\t0.3333333333333333\t4\n1941-01-01\t11\t1\t0.09090909090909091\t5\n1942-01-01\t10\t2\t0.2\t6\n1943-01-01\t8\t1\t0.125\t7\n1945-01-01\t10\t2\t0.2\t8\n1953-01-01\t46\t1\t0.021739130434782608\t9\n1954-01-01\t87\t3\t0.034482758620689655\t10\n1956-01-01\t159\t4\t0.025157232704402517\t11\n1957-01-01\t148\t5\t0.033783783783783786\t12\n1958-01-01\t197\t6\t0.030456852791878174\t13\n1959-01-01\t408\t11\t0.02696078431372549\t14\n1960-01-01\t331\t15\t0.045317220543806644\t15\n1961-01-01\t482\t6\t0.012448132780082987\t16\n1962-01-01\t813\t16\t0.01968019680196802\t17\n1963-01-01\t643\t19\t0.029548989113530325\t18\n1964-01-01\t662\t6\t0.00906344410876133\t19\n1965-01-01\t777\t7\t0.009009009009009009\t20\n1966-01-01\t916\t9\t0.009825327510917031\t21\n1967-01-01\t1263\t8\t0.006334125098970704\t22\n1968-01-01\t1797\t20\t0.011129660545353366\t23\n1969-01-01\t1520\t9\t0.0059210526315789476\t24\n1970-01-01\t1691\t19\t0.011235955056179775\t25\n1972-01-01\t2410\t25\t0.01037344398340249\t26\n1973-01-01\t2855\t18\t0.006304728546409807\t27\n1974-01-01\t3482\t27\t0.007754164273406089\t28\n1975-01-01\t3820\t21\t0.00549738219895288\t29\n1976-01-01\t4363\t129\t0.029566811826724732\t30\n1977-01-01\t4570\t69\t0.015098468271334792\t31\n1978-01-01\t4732\t47\t0.009932375316990701\t32\n1979-01-01\t5425\t140\t0.025806451612903226\t33\n1980-01-01\t6263\t230\t0.036723614881047424\t34\n1981-01-01\t6955\t365\t0.052480230050323505\t35\n1982-01-01\t8252\t329\t0.0398691226369365\t36\n1983-01-01\t9312\t364\t0.0390893470790378\t37\n1984-01-01\t11288\t571\t0.05058469170800851\t38\n1985-01-01\t11186\t679\t0.0607008760951189\t39\n1986-01-01\t14159\t754\t0.0532523483296843\t40\n1987-01-01\t15622\t854\t0.054666495967225705\t41\n1988-01-01\t19088\t998\t0.052284157585917854\t42\n1989-01-01\t22545\t1875\t0.08316699933466401\t43\n1990-01-01\t27489\t2395\t0.08712575939466696\t44\n1991-01-01\t30526\t3801\t0.12451680534626221\t45\n1992-01-01\t34934\t4781\t0.13685807522757198\t46\n1993-01-01\t43029\t7784\t0.18090125264356596\t47\n1994-01-01\t49877\t9889\t0.19826773863704714\t48\n1995-01-01\t53326\t12096\t0.22683118928852716\t49\n1996-01-01\t56559\t13369\t0.23637263742286815\t50\n1997-01-01\t65113\t17853\t0.27418487859567214\t51\n1998-01-01\t71855\t22231\t0.30938695984969733\t52\n1999-01-01\t80502\t25835\t0.3209237037589128\t53\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518883105755_186913647",
+      "id": "20180217-155825_1147886704",
+      "dateCreated": "Feb 17, 2018 3:58:25 PM",
+      "dateStarted": "Feb 17, 2018 5:12:30 PM",
+      "dateFinished": "Feb 17, 2018 5:12:38 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1518883396128_-1849944862",
+      "id": "20180217-160316_896473044",
+      "dateCreated": "Feb 17, 2018 4:03:16 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "SampleUseCases/ConnectedComponentsOverTime",
+  "id": "2D7DJD7AV",
+  "angularObjects": {
+    "2CYWUJACM:shared_process": [],
+    "2D1EN4QZD:shared_process": [],
+    "2CZD71VF8:shared_process": [],
+    "2CZ37EUFT:shared_process": [],
+    "2CZBJT9XJ:shared_process": [],
+    "2CZ5H6JXQ:shared_process": [],
+    "2D12E1BMZ:shared_process": [],
+    "2CZZQVU59:shared_process": [],
+    "2D168XTGW:shared_process": [],
+    "2CYTH192P:shared_process": [],
+    "2CX3PZJZQ:shared_process": [],
+    "2CZTTJ1FV:shared_process": [],
+    "2CWNYDQ86:shared_process": [],
+    "2CZFHBZDG:shared_process": [],
+    "2CYHP3ZX4:shared_process": [],
+    "2CY96RJ1Y:shared_process": [],
+    "2CXRXM356:shared_process": [],
+    "2CY1N7Q3W:shared_process": [],
+    "2CZXKHW8J:shared_process": [],
+    "2CZE4C357:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}

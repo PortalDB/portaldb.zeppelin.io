@@ -3,7 +3,7 @@
     {
       "text": "z.show(\"\"\"%html\n\u003ch3\u003eIn this use case, we\u0027ll use TGraph\u0027s analytics functions to  calculate a pagerank trend for DBLP.\u003c/h3\u003e\n    \u003ch4\u003eFirst, we\u0027ll calculate the connected components over time.\u003c/h4\u003e\n    \u003ch4\u003eThen, we\u0027ll calculate pagerank, and view the nodes with the highest growth in their pagerank value over time  \u003c/h4\u003e\n\"\"\")\n\n",
       "user": "anonymous",
-      "dateUpdated": "Jan 14, 2018 4:14:06 PM",
+      "dateUpdated": "Feb 17, 2018 3:17:31 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -13,7 +13,7 @@
           "editOnDblClick": false
         },
         "editorMode": "ace/mode/scala",
-        "editorHide": true
+        "editorHide": false
       },
       "settings": {
         "params": {},
@@ -38,6 +38,176 @@
       "progressUpdateIntervalMs": 500
     },
     {
+      "text": "import java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal._\nimport edu.drexel.cs.dbgroup.portal.representations.HybridGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\n\nval dblp: HybridGraph[String, Any] \u003d GraphLoader\n  .buildHG(\"file:///zeppelin/dblp\", 1, 1, Interval(LocalDate.parse(\"1985-01-01\"), LocalDate.MAX))\n  .asInstanceOf[HybridGraph[String,Any]]    ",
+      "user": "anonymous",
+      "dateUpdated": "Feb 14, 2018 11:31:05 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.time.LocalDate\nimport edu.drexel.cs.dbgroup.portal._\nimport edu.drexel.cs.dbgroup.portal.representations.HybridGraph\nimport edu.drexel.cs.dbgroup.portal.util.GraphLoader\njava.lang.NullPointerException\n  at edu.drexel.cs.dbgroup.portal.representations.HybridGraph$.fromDataFrames(HybridGraph.scala:1423)\n  at edu.drexel.cs.dbgroup.portal.util.GraphLoader$.buildHG(GraphLoader.scala:146)\n  ... 49 elided\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1515718189507_-239747257",
+      "id": "20180112-004949_1135078938",
+      "dateCreated": "Jan 12, 2018 12:49:49 AM",
+      "dateStarted": "Feb 14, 2018 11:22:25 PM",
+      "dateFinished": "Feb 14, 2018 11:22:46 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import java.math.{BigDecimal, RoundingMode}\nimport org.apache.commons.lang.StringUtils\nimport org.apache.spark.graphx.VertexId\n\n  /**\n    * takes a string and converts it to max 3 decimals of precision using BigDecimal rounding\n    * @param fourDecimalString a string representation of a decimal\n    * @return a string representation of a 3 digit precision decimal\n    */\n    def fourDecimalStringTo3DecimalString(fourDecimalString: String) \u003d new BigDecimal(fourDecimalString).setScale(3,RoundingMode.HALF_UP).toString\n    /**\n    * from two strings, creates a comma separated string representing latitude and longitude to 3 decimal precision\n    * @param lat latitude\n    * @param long longitude\n    * @return a comma separated string where the latitude (to 3 decimal places) is before the comma, longitude after\n    */\n    def roundLatLongTo3DecimalString(lat: String, long: String): String \u003d s\"${fourDecimalStringTo3DecimalString(lat)},${fourDecimalStringTo3DecimalString(long)}\"\n  /**\n    * from a comma separated lat/long string, extracts the lat\n    * @param latLong a comma separated latlong string\n    * @return the lat part\n    */\n    def latFromString(latLong: String): String \u003d latLong.split(\",\")(0)\n  /**\n    * from a comma separated lat/long string, extracts the long\n    * @param latLong a comma separated latlong string\n    * @return the long part\n    */\n    def longFromString(latLong: String): String \u003d latLong.split(\",\")(1)\n    \n  /**\n    * from a single latLong string, produces the 3 decimal version\n    * @param latLong latLong string representation\n    * @return 3 decimal version\n    */\n    def roundLatLongString(latLong: String): String \u003d roundLatLongTo3DecimalString(latFromString(latLong),longFromString(latLong))\n    \n  /**\n    * this val adheres to the signature of createAttributeNodes, but the 2nd latLong value doesn\u0027t matter.  We already know based on\n    * the rounding in the method which creates vertex ID\u0027s that both values will roudn to the same 3 digit latLong\n    */\n  val roundFirstLatLongString: (String,String) \u003d\u003e String \u003d (latLong1: String, latLong2: String) \u003d\u003e roundLatLongString(latLong1)\n\n  /**\n    * from a given vertex\u0027s latlong, produce an ID that represents that latLong to only 3 decimals, as a 10 digit long value (which will be unique by definition)\n    */\n  val newVidFromLatLongString \u003d (vid: VertexId, attr: String) \u003d\u003e StringUtils.rightPad(roundLatLongString(attr).replace(\",\",\"\").replace(\".\",\"\").replace(\"-\",\"\"),10,\"0\").toLong\n",
+      "user": "anonymous",
+      "dateUpdated": "Feb 14, 2018 11:06:44 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala",
+        "editorHide": true,
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "import java.math.{BigDecimal, RoundingMode}\nimport org.apache.commons.lang.StringUtils\nimport org.apache.spark.graphx.VertexId\nfourDecimalStringTo3DecimalString: (fourDecimalString: String)String\nroundLatLongTo3DecimalString: (lat: String, long: String)String\nlatFromString: (latLong: String)String\nlongFromString: (latLong: String)String\nroundLatLongString: (latLong: String)String\nroundFirstLatLongString: (String, String) \u003d\u003e String \u003d \u003cfunction2\u003e\nnewVidFromLatLongString: (org.apache.spark.graphx.VertexId, String) \u003d\u003e Long \u003d \u003cfunction2\u003e\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518569304532_-419387947",
+      "id": "20180214-004824_876884778",
+      "dateCreated": "Feb 14, 2018 12:48:24 AM",
+      "dateStarted": "Feb 14, 2018 10:51:28 PM",
+      "dateFinished": "Feb 14, 2018 10:51:51 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "ProgramContext.setContext(sc)\n\nval connectedComponents \u003d dblp.connectedComponents\n\n",
+      "user": "anonymous",
+      "dateUpdated": "Feb 14, 2018 11:18:46 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": "org.apache.thrift.transport.TTransportException",
+      "apps": [],
+      "jobName": "paragraph_1518570430234_51951358",
+      "id": "20180214-010710_796957336",
+      "dateCreated": "Feb 14, 2018 1:07:10 AM",
+      "dateStarted": "Feb 14, 2018 11:18:46 PM",
+      "dateFinished": "Feb 14, 2018 11:21:15 PM",
+      "status": "ERROR",
+      "errorMessage": "org.apache.thrift.transport.TTransportException\n\tat org.apache.thrift.transport.TIOStreamTransport.read(TIOStreamTransport.java:132)\n\tat org.apache.thrift.transport.TTransport.readAll(TTransport.java:86)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readAll(TBinaryProtocol.java:429)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readI32(TBinaryProtocol.java:318)\n\tat org.apache.thrift.protocol.TBinaryProtocol.readMessageBegin(TBinaryProtocol.java:219)\n\tat org.apache.thrift.TServiceClient.receiveBase(TServiceClient.java:69)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.recv_interpret(RemoteInterpreterService.java:266)\n\tat org.apache.zeppelin.interpreter.thrift.RemoteInterpreterService$Client.interpret(RemoteInterpreterService.java:250)\n\tat org.apache.zeppelin.interpreter.remote.RemoteInterpreter.interpret(RemoteInterpreter.java:373)\n\tat org.apache.zeppelin.interpreter.LazyOpenInterpreter.interpret(LazyOpenInterpreter.java:97)\n\tat org.apache.zeppelin.notebook.Paragraph.jobRun(Paragraph.java:406)\n\tat org.apache.zeppelin.scheduler.Job.run(Job.java:175)\n\tat org.apache.zeppelin.scheduler.RemoteScheduler$JobRunner.run(RemoteScheduler.java:329)\n\tat java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:511)\n\tat java.util.concurrent.FutureTask.run(FutureTask.java:266)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.access$201(ScheduledThreadPoolExecutor.java:180)\n\tat java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:293)\n\tat java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)\n\tat java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)\n\tat java.lang.Thread.run(Thread.java:748)\n",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val initVertexCount \u003d connectedComponents.vmap({ case (vid, (intv, (name, componentId))) \u003d\u003e (componentId, 1L)})\nval componentIdAsVertexId \u003d ",
+      "user": "anonymous",
+      "dateUpdated": "Feb 14, 2018 11:20:50 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "ERROR",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "java.lang.NullPointerException\n  at edu.drexel.cs.dbgroup.portal.representations.OneGraphColumn.computeGraph(OneGraphColumn.scala:1116)\n  at edu.drexel.cs.dbgroup.portal.representations.OneGraphColumn.pageRank(OneGraphColumn.scala:562)\n  ... 48 elided\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518570755876_910986738",
+      "id": "20180214-011235_1647675135",
+      "dateCreated": "Feb 14, 2018 1:12:35 AM",
+      "dateStarted": "Feb 14, 2018 10:52:19 PM",
+      "dateFinished": "Feb 14, 2018 10:52:21 PM",
+      "status": "ERROR",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "locationRank.vertices.collect.foreach({ case (vid, (intv, (latLong, pageRank))) \u003d\u003e println(s\"vid: ${vid.toString}, pageRank: ${pageRank}\")})",
+      "user": "anonymous",
+      "dateUpdated": "Feb 14, 2018 1:26:17 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala"
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "vid: 4074273997, pageRank: 0.15\nvid: 4076573977, pageRank: 0.15\nvid: 4073473999, pageRank: 0.15\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1518571114148_1627280800",
+      "id": "20180214-011834_1567748064",
+      "dateCreated": "Feb 14, 2018 1:18:34 AM",
+      "dateStarted": "Feb 14, 2018 1:26:17 AM",
+      "dateFinished": "Feb 14, 2018 1:26:18 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
       "user": "anonymous",
       "config": {},
       "settings": {
@@ -45,9 +215,9 @@
         "forms": {}
       },
       "apps": [],
-      "jobName": "paragraph_1515718189507_-239747257",
-      "id": "20180112-004949_1135078938",
-      "dateCreated": "Jan 12, 2018 12:49:49 AM",
+      "jobName": "paragraph_1518571566771_1835121827",
+      "id": "20180214-012606_329287962",
+      "dateCreated": "Feb 14, 2018 1:26:06 AM",
       "status": "READY",
       "progressUpdateIntervalMs": 500
     }
